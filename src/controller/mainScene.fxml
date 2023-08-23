@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.Pane?>
+
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
+<?import javafx.util.Callback?>
+<?import javafx.scene.control.ListCell?>
+<Pane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
+   <children>
+      <Pane cache="true" prefHeight="550.0" prefWidth="750.0" style="-fx-background-color: EDF2F7;">
+         <children>
+            <Pane fx:id="paneVisualize" layoutX="25.0" layoutY="25.0" prefHeight="500.0" prefWidth="500.0" style="-fx-background-color: ffffff;">
+               <children>
+                  <Canvas fx:id="canvas" />
+               </children>
+            </Pane>
+            <Pane fx:id="paneButton" layoutX="550.0" prefHeight="550.0" prefWidth="200.0">
+               <children>
+                  <ComboBox fx:id="comboBoxOptions" layoutY="25.0" prefHeight="48.0" prefWidth="200.0" style="-fx-background-color: ffffff; -fx-border-color: A0AEC0; -fx-border-style: solid none none none; -fx-border-width: 2">
+                     <items>
+                        <FXCollections fx:factory="observableArrayList">
+                           <String fx:value="cellular automata" />
+                           <String fx:value="parallel cellular automata" />
+                           <String fx:value="frontal cellular automata" />
+                        </FXCollections>
+                     </items>
+                     <value>
+                        <String fx:value="cellular automata" />
+                     </value>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                     <style>
+                        <String fx:value="-fx-alignment: CENTER_LEFT;" />
+                     </style>
+                  </ComboBox>
+                  <Button fx:id="btnInit" layoutY="75.0" mnemonicParsing="false" onAction="#handleBtnInit" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: ffffff; -fx-background-color: ffffff; -fx-border-color: ffffff; -fx-border-width: 2; -fx-border-style: solid none solid none;" text="Initialize microstructure" textAlignment="CENTER" wrapText="true" />
+                  <TextField fx:id="textFieldC" layoutY="475.0" onAction="#TextFieldCHandle" prefHeight="50.0" prefWidth="200.0" promptText="C [%]" style="-fx-background-color: ffffff; -fx-border-color: ffffff; -fx-border-width: 2; -fx-border-style: solid none none none;" />
+                  <Button fx:id="btnRun" layoutY="125.0" mnemonicParsing="false" onAction="#handleBtnRun" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: ffffff; -fx-border-color: A0AEC0; -fx-border-width: 2; -fx-border-style: solid none none none;" text="Run" textAlignment="CENTER" wrapText="true" />
+                  <Button fx:id="btnStop" layoutY="175.0" mnemonicParsing="false" onAction="#handleBtnStop" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: ffffff; -fx-border-color: A0AEC0; -fx-border-width: 2; -fx-border-style: solid none none none;" text="Stop" textAlignment="CENTER" wrapText="true" />
+                  <Button fx:id="btnBorder" layoutY="225.0" mnemonicParsing="false" onAction="#handleBtnBorder" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: ffffff; -fx-border-color: A0AEC0; -fx-border-width: 2; -fx-border-style: solid none none none;" text="Border" textAlignment="CENTER" wrapText="true" />
+                  <Button fx:id="btnFerrite" layoutY="275.0" mnemonicParsing="false" onAction="#handleBtnFerrite" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: ffffff; -fx-border-color: A0AEC0; -fx-border-width: 2; -fx-border-style: solid none none none;" text="Ferrite" textAlignment="CENTER" wrapText="true" />
+<!--                  <Button fx:id="btnPearlite" layoutY="325.0" mnemonicParsing="false" onAction="#handleBtnPearlite" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: ffffff; -fx-border-color: A0AEC0; -fx-border-width: 2; -fx-border-style: solid none none none;" text="Pearlite" textAlignment="CENTER" wrapText="true" />-->
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets right="1.0" />
+               </padding>
+            </Pane>
+         </children>
+      </Pane>
+   </children>
+</Pane>
