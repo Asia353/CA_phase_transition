@@ -22,6 +22,7 @@ public class AusteniteFerriteTransformation extends Simulation{
     @Override
     public void initGrains() {
 
+        System.out.println("Sprawdzenie czy na pewno lista z zianrami pending jest pusta: " + grid.cellsListFCA.size());
         grid.countBorderStateAustenit();
         Collections.shuffle(grid.cellsListOnTheBorder);
 
@@ -47,6 +48,8 @@ public class AusteniteFerriteTransformation extends Simulation{
 //                w deleteCell od razu modyfikowane jest stężenie węgla
                 grid.grainsList.get(currentId).deleteCell(this.ferrytCarbon);
                 grid.cellsList[cell.getX()][cell.getY()][cell.getZ()].idGrain = newId;
+
+                grid.cellsListFCA.add(grid.cellsList[cell.getX()][cell.getY()][cell.getZ()]);
 
                 i++;
             }
@@ -176,6 +179,75 @@ public class AusteniteFerriteTransformation extends Simulation{
 
         grid.iterationSimulation++;
 //        System.out.println("iteracja symulacji: " + grid.iterationSimulation);
+    }
+
+
+    public void dodajSasiadowDoListy(Cell cell){
+        //        sąsiedztwo moore'a
+        Map<Integer, Double> neighbours = new HashMap<>();
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                for (int k = -1; k <= 1; k++) {
+
+//                warunki brzegowe periodyczne
+                    int X = (grid.getHeight() + cell.getX() + i) % grid.getHeight();
+                    int Y = (grid.getWidth() + cell.getY() + j) % grid.getWidth();
+                    int Z = (grid.getDepth() + cell.getZ() + k) % grid.getDepth();
+
+//                    komórka zmienia stan na pending, dostaje id ziarna analizowanego i dodana jest do listy następnego kroku
+                    if (grid.cellsList[X][Y][Z].getGrainType(grid) == GrainType.austenite & grid.grainsList.get(grid.cellsList[X][Y][Z].idGrain).getCarbonConcentration() < 0.77 & (grid.cellsList[X][Y][Z].idGrain == grid.grainsList.get(cell.idGrain).getParentGrain())) {
+
+                        grid.grainsList.get(grid.cellsList[X][Y][Z].idGrain).deleteCell(this.ferrytCarbon);
+                        grid.grainsList.get(cell.idGrain).addCell(this.ferrytCarbon);
+
+                        grid.nextCellsList[X][Y][Z].cellState = CellState.pending;
+                        grid.nextCellsList[X][Y][Z].idGrain = cell.idGrain;
+                        grid.nextCellsList[X][Y][Z].time = countDistance(grid.nextCellsList[X][Y][Z], X, Y, Z);
+
+                        grid.nextCellsListFCA.add(grid.cellsList[X][Y][Z]);
+                    }
+                }
+            }
+        }
+    }
+
+    public void growFCA(){
+
+//        po co każde ziarno ma swoją iterację?
+        for(int i = 0; i < grid.grainsList.size(); i++) {
+            grid.grainsList.get(i).iteration++;
+        }
+
+        this.run = false;
+
+        grid.nextCellsList = grid.cellsList; //?
+        grid.nextCellsListFCA = new ArrayList<>();
+
+//        System.out.println("numer iteracji ferryt: " + grid.iterationSimulation);
+
+        for(Cell cell : grid.cellsListFCA) {
+
+            this.run = true;
+
+            if(grid.iterationSimulation == 0) {
+                dodajSasiadowDoListy(cell);
+            }
+
+            else if (cell.cellState == CellState.pending) {
+                if (((int) Math.ceil(cell.time)) <= grid.iterationSimulation) {
+                    grid.nextCellsList[cell.getX()][cell.getY()][cell.getZ()].cellState = CellState.active;
+                    dodajSasiadowDoListy(cell);
+                }
+                else {
+                    grid.nextCellsListFCA.add(cell);
+                }
+            }
+        }
+
+        grid.cellsList = grid.nextCellsList;
+        grid.cellsListFCA = grid.nextCellsListFCA;
+
+        grid.iterationSimulation++;
     }
 
     @Override

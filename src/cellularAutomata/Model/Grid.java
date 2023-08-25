@@ -18,6 +18,8 @@ public class Grid {
     public Cell[][][] nextCellsList;
     public List<Cell> cellsListOnTheBorder;
     public List<Cell> allCellsOnTheBorder;
+    public List<Cell> cellsListFCA;
+    public List<Cell> nextCellsListFCA;
 
     public Map<Integer, Grain> grainsList;
     private Random random = new Random();
@@ -40,6 +42,7 @@ public class Grid {
         this.numberOfGrainsAustenite = numberOfGrainsAustenite;
 
         this.cellsList = new Cell[this.height][this.width][this.depth];
+        this.cellsListFCA = new ArrayList<>();
         initGrid();
 
         this.grainsList = new HashMap<>();
@@ -132,17 +135,17 @@ public class Grid {
         notifyObservers();
     }
 
+    public void grainGrowSimulationRun(){
+        grainGrowth.grow();
+//        notifyObservers();
+    }
+
     public void grainGrowthSimulationRunParallel(int numberOfThreads){
         grainGrowth.growParallel(numberOfThreads);
     }
 
-    public void grainausteniteFerriteSimulationRunParallel(int numberOfThreads){
-        austeniteFerriteTransformation.growParallel(numberOfThreads);
-    }
-
-    public void grainGrowSimulationRun(){
-        grainGrowth.grow();
-//        notifyObservers();
+    public void grainGrowthSimulationRunFCA(){
+        grainGrowth.growFCA();
     }
 
     public void grainGrowthOneStep() {
@@ -153,7 +156,15 @@ public class Grid {
     public void austeniteFerriteSimulationRun(){
         austeniteFerriteTransformation.grow();
 //        notifyObservers();
+    }
 
+    public void austeniteFerriteSimulationRunParallel(int numberOfThreads){
+        austeniteFerriteTransformation.growParallel(numberOfThreads);
+    }
+
+    public void austeniteFerriteSimulationRunFCA(){
+        austeniteFerriteTransformation.growFCA();
+//        notifyObservers();
     }
 
     public void austeniteFerriteInit(){

@@ -25,6 +25,11 @@ public class GrainGrowth extends Simulation{
         for (int i = 0; i < grid.getNumberOfGrainsAustenite();) {
             if (addRandomNewGrain()) i++;
         }
+
+//        do sprawdzenia
+//        for (int i =0; i<grid.cellsListFCA.size();i++) {
+//            System.out.println(i + ": " + grid.cellsListFCA.get(i).idGrain);
+//        }
     }
 
     private boolean addRandomNewGrain(){
@@ -40,6 +45,8 @@ public class GrainGrowth extends Simulation{
             grid.cellsList[x][y][z].idGrain = id;
             grid.cellsList[x][y][z].cellState = CellState.active;
             grid.grainsList.put(id, new Grain(id, GrainType.austenite, x, y, z, grid.carbon));
+//            do fca
+            grid.cellsListFCA.add(grid.cellsList[x][y][z]);
 //            System.out.println("ziarno: " +  id + ", x,y,z: " +x+ "," + y+ ","+z);
             return true;
         }
@@ -143,6 +150,73 @@ public class GrainGrowth extends Simulation{
         }
 
         grid.cellsList = grid.nextCellsList;
+
+        if(!this.run) {
+            addCellState();
+            grid.iterationSimulation = 0;
+        }
+
+        grid.iterationSimulation++;
+    }
+
+    public void dodajSasiadowDoListy(Cell cell){
+        //        sąsiedztwo moore'a
+        Map<Integer, Double> neighbours = new HashMap<>();
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                for (int k = -1; k <= 1; k++) {
+
+//                warunki brzegowe periodyczne
+                    int X = (grid.getHeight() + cell.getX() + i) % grid.getHeight();
+                    int Y = (grid.getWidth() + cell.getY() + j) % grid.getWidth();
+                    int Z = (grid.getDepth() + cell.getZ() + k) % grid.getDepth();
+
+//                    Jesli komórka w sąsiedztwie jest w stanie początkowym to zmieniamy jej stan na pośredni i dodajemy do listy komórek do następnego kroku czasowego
+//                    if (grid.cellsList[X][Y][Z].cellState == CellState.notAlive) {
+//                        grid.nextCellsList[X][Y][Z].cellState = CellState.transitional;
+//                        grid.nextCellsListFCA.add(grid.cellsList[X][Y][Z]);
+//                    }
+//                    komórka zmienia stan na pending, dostaje id ziarna analizowanego i dodana jest do listy następnego kroku
+                    if (grid.cellsList[X][Y][Z].cellState == CellState.notAlive) {
+                        grid.nextCellsList[X][Y][Z].cellState = CellState.pending;
+                        grid.nextCellsList[X][Y][Z].idGrain = cell.idGrain;
+                        grid.nextCellsList[X][Y][Z].time = countDistance(grid.nextCellsList[X][Y][Z], X, Y, Z); //czy to ok?
+                        grid.nextCellsListFCA.add(grid.cellsList[X][Y][Z]);
+                    }
+                }
+            }
+        }
+    }
+
+    public void growFCA(){
+//        System.out.println("Numer iteracji w grain growFCA: " + grid.iterationSimulation);
+//        grid.nextCellsList = new Cell[grid.getHeight()][grid.getWidth()][grid.getDepth()];
+        grid.nextCellsList = grid.cellsList;
+
+        grid.nextCellsListFCA = new ArrayList<>();
+        this.run = false;
+
+        for(Cell cell : grid.cellsListFCA) {
+            this.run = true;
+
+            if(grid.iterationSimulation == 0) {
+                dodajSasiadowDoListy(cell);
+            }
+
+            else if (cell.cellState == CellState.pending) {
+                if (((int) Math.ceil(cell.time)) <= grid.iterationSimulation) {
+                    grid.nextCellsList[cell.getX()][cell.getY()][cell.getZ()].cellState = CellState.active;
+                    grid.grainsList.get(cell.idGrain).addCell(grid.carbon); //zliczanie komórek w ziarnie
+                    dodajSasiadowDoListy(cell);
+                }
+                else {
+                    grid.nextCellsListFCA.add(cell);
+                }
+            }
+        }
+
+        grid.cellsList = grid.nextCellsList;
+        grid.cellsListFCA = grid.nextCellsListFCA;
 
         if(!this.run) {
             addCellState();

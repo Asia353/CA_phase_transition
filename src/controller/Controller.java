@@ -10,9 +10,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 
-import java.io.*;
-import java.util.*;
-
 public class Controller {
 
     private AppController appController;
@@ -29,10 +26,10 @@ public class Controller {
     private Grid grid;
     private Visualizer visualizer;
 
-    private int height = 100;
-    private int width = 100;
-    private int depth = 100;
-    private int numberOfGrains = 30;
+    private int height = 80;
+    private int width = 80;
+    private int depth = 80;
+    private int numberOfGrains = 20;
     private int visScale = 1;
     private int numberOfThreads = 12;
 //    0 - sekwencyjny, 1 - rónoległy, 2 - frontalny
@@ -104,6 +101,9 @@ public class Controller {
 
         else{
             System.out.println("Frontalny automat komórkowy");
+            while (grid.grainGrowthRun()) {
+                grid.grainGrowthSimulationRunFCA();
+            }
         }
 
         long executionTime = (System.currentTimeMillis() - millisActualTime);
@@ -127,6 +127,7 @@ public class Controller {
     }
 
     public void handleBtnFerrite(ActionEvent event) {
+        grid.iterationSimulation = 0;
         long millisActualTime = System.currentTimeMillis(); // początkowy czas w milisekundach.
         grid.austeniteFerriteInit();
 
@@ -139,12 +140,15 @@ public class Controller {
         else if(this.simulationType == 1) {
             System.out.println("Automat komórkowy równoległy - austenit-ferryt (wątki: " + this.numberOfThreads + ")");
             while (grid.austeniteFerriteRun()) {
-                grid.grainausteniteFerriteSimulationRunParallel(this.numberOfThreads);
+                grid.austeniteFerriteSimulationRunParallel(this.numberOfThreads);
             }
         }
 
         else{
             System.out.println("Frontalny automat komórkowy - austenit-ferryt");
+            while(grid.austeniteFerriteRun()){
+                grid.austeniteFerriteSimulationRunFCA();
+            }
         }
 
         long executionTime = (System.currentTimeMillis() - millisActualTime);
