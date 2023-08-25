@@ -13,14 +13,14 @@
 <?import javafx.scene.control.ListCell?>
 <Pane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
    <children>
-      <Pane cache="true" prefHeight="550.0" prefWidth="750.0" style="-fx-background-color: EDF2F7;">
+      <Pane cache="true" prefHeight="850.0" prefWidth="1100.0" style="-fx-background-color: EDF2F7;">
          <children>
-            <Pane fx:id="paneVisualize" layoutX="25.0" layoutY="25.0" prefHeight="500.0" prefWidth="500.0" style="-fx-background-color: ffffff;">
+            <Pane fx:id="paneVisualize" layoutX="25.0" layoutY="25.0" prefHeight="800.0" prefWidth="800.0" style="-fx-background-color: ffffff;">
                <children>
                   <Canvas fx:id="canvas" />
                </children>
             </Pane>
-            <Pane fx:id="paneButton" layoutX="550.0" prefHeight="550.0" prefWidth="200.0">
+            <Pane fx:id="paneButton" layoutX="850.0" prefHeight="850.0" prefWidth="200.0">
                <children>
                   <ComboBox fx:id="comboBoxOptions" layoutY="25.0" prefHeight="48.0" prefWidth="200.0" style="-fx-background-color: ffffff; -fx-border-color: A0AEC0; -fx-border-style: solid none none none; -fx-border-width: 2">
                      <items>

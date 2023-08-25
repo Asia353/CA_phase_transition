@@ -3,15 +3,20 @@ package cellularAutomata.Simulation;
 import cellularAutomata.Model.*;
 
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
 public class AusteniteFerriteTransformation extends Simulation{
     public double ferrytCarbon = 0.0218;
     private double numberOfFerriteGrains;
     private boolean run = true;
+    private ExecutorService executorService;
 
 
     public AusteniteFerriteTransformation(Grid grid) {
         super(grid);
+        this.executorService = Executors.newFixedThreadPool(12);
     }
 
     @Override
@@ -21,7 +26,7 @@ public class AusteniteFerriteTransformation extends Simulation{
         Collections.shuffle(grid.cellsListOnTheBorder);
 
 //        numberOfFerriteGrains = grid.cellsListOnTheBorder.size() * 0.1; //domyślnie
-        numberOfFerriteGrains = grid.cellsListOnTheBorder.size() * 0.01;
+        numberOfFerriteGrains = grid.cellsListOnTheBorder.size() * 0.01; //3D
 
         System.out.println("number of ferrite: " + numberOfFerriteGrains );
 
@@ -99,6 +104,73 @@ public class AusteniteFerriteTransformation extends Simulation{
                 }
             }
         }
+
+        grid.cellsList = grid.nextCellsList;
+
+        grid.iterationSimulation++;
+//        System.out.println("iteracja symulacji: " + grid.iterationSimulation);
+    }
+
+    public void growParallel(int numberOfThreads){
+
+        for(int i = 0; i < grid.grainsList.size(); i++) {
+            grid.grainsList.get(i).iteration++;
+        }
+
+        this.run = false;
+
+        int threats = numberOfThreads;
+        List<Runnable> tasks = new ArrayList<>(threats);
+
+        for (int task = 0; task < threats; task++) {
+            int n = task;
+            tasks.add(() -> {
+                for (int i = n * grid.getHeight() / threats; i < (n + 1) * grid.getHeight() / threats; i++) {
+                    for (int j = 0; j < grid.getWidth(); j++) {
+                        for (int k = 0; k < grid.getDepth(); k++) {
+
+                            grid.nextCellsList[i][j][k] = new Cell(grid.cellsList[i][j][k]);
+
+                            int currentGrainID = grid.cellsList[i][j][k].idGrain;
+                            Cell currentCell = grid.cellsList[i][j][k];
+
+                            if (currentCell.getGrainType(grid) == GrainType.austenite && grid.grainsList.get(currentGrainID).getCarbonConcentration() < 0.77) {
+
+                                int newId = findNewId(i, j, k);
+
+                                if (newId != currentGrainID) {
+
+                                    this.run = true;
+
+//                            currentCell?
+                                    grid.grainsList.get(grid.cellsList[i][j][k].idGrain).deleteCell(this.ferrytCarbon);
+                                    grid.grainsList.get(newId).addCell(this.ferrytCarbon);
+
+                                    grid.nextCellsList[i][j][k].cellState = CellState.pending;
+                                    grid.nextCellsList[i][j][k].idGrain = newId;
+                                    grid.nextCellsList[i][j][k].time = countDistance(grid.nextCellsList[i][j][k], i, j, k);
+
+                                }
+                            }
+
+                            if (grid.nextCellsList[i][j][k].cellState == CellState.pending) {
+
+                                this.run = true;
+
+                                if (((int) Math.ceil(grid.nextCellsList[i][j][k].time)) <= grid.grainsList.get(grid.nextCellsList[i][j][k].idGrain).iteration) {
+                                    grid.nextCellsList[i][j][k].cellState = CellState.active;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+            try {
+                executorService.invokeAll(tasks.stream().map(Executors::callable).collect(Collectors.toList()));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
         grid.cellsList = grid.nextCellsList;
 

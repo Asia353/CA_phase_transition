@@ -29,9 +29,9 @@ public class Controller {
     private Grid grid;
     private Visualizer visualizer;
 
-    private int height = 120;
-    private int width = 120;
-    private int depth = 120;
+    private int height = 100;
+    private int width = 100;
+    private int depth = 100;
     private int numberOfGrains = 30;
     private int visScale = 1;
     private int numberOfThreads = 12;
@@ -44,8 +44,8 @@ public class Controller {
         this.appController = appController;
 //        this.canvas.setHeight((height+depth+depth+2) * visScale);
 //        this.canvas.setWidth((width+width+depth+depth+3) * visScale);
-        this.canvas.setHeight(500);
-        this.canvas.setWidth(500);
+        this.canvas.setHeight(850);
+        this.canvas.setWidth(850);
     }
 
     public void handleBtnInit(ActionEvent event) {
@@ -130,8 +130,21 @@ public class Controller {
         long millisActualTime = System.currentTimeMillis(); // początkowy czas w milisekundach.
         grid.austeniteFerriteInit();
 
-        while(grid.austeniteFerriteRun()){
-            grid.austeniteFerriteSimulationRun();
+        if(this.simulationType == 0) {
+            System.out.println("Automat komórkowy sekwencyjny - austenit-ferryt");
+            while(grid.austeniteFerriteRun()){
+                grid.austeniteFerriteSimulationRun();
+            }
+        }
+        else if(this.simulationType == 1) {
+            System.out.println("Automat komórkowy równoległy - austenit-ferryt (wątki: " + this.numberOfThreads + ")");
+            while (grid.austeniteFerriteRun()) {
+                grid.grainausteniteFerriteSimulationRunParallel(this.numberOfThreads);
+            }
+        }
+
+        else{
+            System.out.println("Frontalny automat komórkowy - austenit-ferryt");
         }
 
         long executionTime = (System.currentTimeMillis() - millisActualTime);

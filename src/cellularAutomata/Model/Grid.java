@@ -136,6 +136,10 @@ public class Grid {
         grainGrowth.growParallel(numberOfThreads);
     }
 
+    public void grainausteniteFerriteSimulationRunParallel(int numberOfThreads){
+        austeniteFerriteTransformation.growParallel(numberOfThreads);
+    }
+
     public void grainGrowSimulationRun(){
         grainGrowth.grow();
 //        notifyObservers();
@@ -156,17 +160,6 @@ public class Grid {
         austeniteFerriteTransformation.initGrains();
         notifyObservers();
     }
-
-//    public void austenitePearliteSimulationRun(){
-//        austenitePearliteTransformation.grow();
-//        notifyObservers();
-//
-//    }
-//
-//    public void austenitePearliteInit(){
-//        austenitePearliteTransformation.initGrains();
-//        notifyObservers();
-//    }
 
     public void correctCarbon(double carbon){
         this.carbon = carbon;

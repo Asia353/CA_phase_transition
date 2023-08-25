@@ -21,8 +21,6 @@ public class Visualizer implements Observer {
     private Random random;
     private Map<Integer, Color> austenitColor;
     private Map<Integer, Color> ferrytColor;
-//    private Map<Integer, Color> perliteColor;
-
 
     @Override
     public void onValueChanged() {
@@ -36,7 +34,6 @@ public class Visualizer implements Observer {
         this.random = new Random();
         this.austenitColor = new HashMap<>();
         this.ferrytColor = new HashMap<>();
-//        this.perliteColor = new HashMap<>();
 
         this.visScale = visScale;
     }
@@ -45,19 +42,8 @@ public class Visualizer implements Observer {
     private void showGrid() {
         canvasClear();
 
-////        do testów
-//        int austenitL = 0;
-//        int ferrytL = 0;
-//
-//        for (int i = 1; i < grid.grainsList.size(); i++) {
-//            if (grid.getGrainType(i) == GrainType.ferrite) ferrytL++;
-//            else if (grid.getGrainType(i) == GrainType.austenite) austenitL++;
-//        }
-//
-//        System.out.println("ferryt: " + ferrytL + ", austenit: " + austenitL);
-//        System.out.println("liczba ziaren: " + (grid.grainsList.size() - 1));
-
         int i, j, k = 0;
+//        i - hight, j-width
 
         if (grid.getDepth() == 1) {
             k = 0;
@@ -105,13 +91,15 @@ public class Visualizer implements Observer {
                         if (grid.getGrainType(grid.cellsList[i][grid.getWidth() - j - 1][k].idGrain) == GrainType.austenite) {
                             austenitColor.putIfAbsent(grid.cellsList[i][grid.getWidth() - j - 1][k].idGrain, this.red());
                             graphics.setFill(austenitColor.get(grid.cellsList[i][grid.getWidth() - j - 1][k].idGrain));
-                            graphics.fillRect(((grid.getWidth() - j - 1) + 2 * grid.getDepth() + grid.getWidth() + 3) * visScale, (i + grid.getDepth() + 1) * visScale, visScale, visScale);
+//                            graphics.fillRect(((grid.getWidth() - j - 1) + 2 * grid.getDepth() + grid.getWidth() + 3) * visScale, (i + grid.getDepth() + 1) * visScale, visScale, visScale);
+                            graphics.fillRect(((j) + 2 * grid.getDepth() + grid.getWidth() + 3) * visScale, (i + grid.getDepth() + 1) * visScale, visScale, visScale);
                         }
                         else if (grid.getGrainType(grid.cellsList[i][grid.getWidth() - j - 1][k].idGrain) == GrainType.ferrite) {
 //                            System.out.println("ferrite");
                             ferrytColor.putIfAbsent(grid.cellsList[i][grid.getWidth() - j - 1][k].idGrain, this.yellow());
                             graphics.setFill(ferrytColor.get(grid.cellsList[i][grid.getWidth() - j - 1][k].idGrain));
-                            graphics.fillRect(((grid.getWidth() - j - 1) + 2 * grid.getDepth() + grid.getWidth() + 3) * visScale, (i + grid.getDepth() + 1) * visScale, visScale, visScale);
+//                            graphics.fillRect(((grid.getWidth() - j - 1) + 2 * grid.getDepth() + grid.getWidth() + 3) * visScale, (i + grid.getDepth() + 1) * visScale, visScale, visScale);
+                            graphics.fillRect(((j) + 2 * grid.getDepth() + grid.getWidth() + 3) * visScale, (i + grid.getDepth() + 1) * visScale, visScale, visScale);
                         }
                     }
                 }
@@ -125,23 +113,25 @@ public class Visualizer implements Observer {
                         if (grid.getGrainType(grid.cellsList[i][j][grid.getDepth() - k - 1].idGrain) == GrainType.austenite) {
                             austenitColor.putIfAbsent(grid.cellsList[i][j][grid.getDepth() - k - 1].idGrain, this.red());
                             graphics.setFill(austenitColor.get(grid.cellsList[i][j][grid.getDepth() - k - 1].idGrain));
-                            graphics.fillRect((grid.getDepth() - k - 1) * visScale, (i + grid.getDepth() + 1) * visScale, visScale, visScale);
+//                            graphics.fillRect((grid.getDepth() - k - 1) * visScale, (i + grid.getDepth() + 1) * visScale, visScale, visScale);
+                            graphics.fillRect((k) * visScale, (i + grid.getDepth() + 1) * visScale, visScale, visScale);
                         }
                         else if (grid.getGrainType(grid.cellsList[i][j][grid.getDepth() - k - 1].idGrain) == GrainType.ferrite) {
                             ferrytColor.putIfAbsent(grid.cellsList[i][j][grid.getDepth() - k - 1].idGrain, this.yellow());
                             graphics.setFill(ferrytColor.get(grid.cellsList[i][j][grid.getDepth() - k - 1].idGrain));
-                            graphics.fillRect((grid.getDepth() - k - 1) * visScale, (i + grid.getDepth() + 1) * visScale, visScale, visScale);
+//                            graphics.fillRect((grid.getDepth() - k - 1) * visScale, (i + grid.getDepth() + 1) * visScale, visScale, visScale);
+                            graphics.fillRect((k) * visScale, (i + grid.getDepth() + 1) * visScale, visScale, visScale);
                         }
                     }
 
                     j = grid.getWidth() - 1;
+//                    E
                     if (grid.cellsList[i][j][k].idGrain != 0) {
                         if (grid.getGrainType(grid.cellsList[i][j][k].idGrain) == GrainType.austenite) {
                             austenitColor.putIfAbsent(grid.cellsList[i][j][k].idGrain, this.red());
                             graphics.setFill(austenitColor.get(grid.cellsList[i][j][k].idGrain));
                             graphics.fillRect((k + 1 * grid.getDepth() + grid.getWidth() + 2) * visScale, (i + grid.getDepth() + 1) * visScale, visScale, visScale);
                         }
-//                        E
                         else if (grid.getGrainType(grid.cellsList[i][j][k].idGrain) == GrainType.ferrite) {
                             ferrytColor.putIfAbsent(grid.cellsList[i][j][k].idGrain, this.yellow());
                             graphics.setFill(ferrytColor.get(grid.cellsList[i][j][k].idGrain));
@@ -150,21 +140,23 @@ public class Visualizer implements Observer {
                     }
                 }
             }
-
-            for (j = 0; j < grid.getWidth(); j++) {
-                for (k = 0; k < grid.getDepth(); k++) {
+// pętle były odwrotnie. Teraz chyba jest okej
+            for (k = 0; k < grid.getDepth(); k++) {
+                for (j = 0; j < grid.getWidth(); j++) {
                     i = 0;
 //                    D
                     if (grid.cellsList[i][j][grid.getDepth() - k - 1].idGrain != 0) {
                         if (grid.getGrainType(grid.cellsList[i][j][grid.getDepth() - k - 1].idGrain) == GrainType.austenite) {
                             austenitColor.putIfAbsent(grid.cellsList[i][j][grid.getDepth() - k - 1].idGrain, this.red());
                             graphics.setFill(austenitColor.get(grid.cellsList[i][j][grid.getDepth() - k - 1].idGrain));
-                            graphics.fillRect((j + grid.getDepth() + 1) * visScale, (grid.getDepth() - k - 1) * visScale, visScale, visScale);
+//                            graphics.fillRect((j + grid.getDepth() + 1) * visScale, (grid.getDepth() - k - 1) * visScale, visScale, visScale);
+                            graphics.fillRect((j + grid.getDepth() + 1) * visScale, (k) * visScale, visScale, visScale);
                         }
                         else if (grid.getGrainType(grid.cellsList[i][j][grid.getDepth() - k - 1].idGrain) == GrainType.ferrite) {
                             ferrytColor.putIfAbsent(grid.cellsList[i][j][grid.getDepth() - k - 1].idGrain, this.yellow());
                             graphics.setFill(ferrytColor.get(grid.cellsList[i][j][grid.getDepth() - k - 1].idGrain));
-                            graphics.fillRect((j + grid.getDepth() + 1) * visScale, (grid.getDepth() - k - 1) * visScale, visScale, visScale);
+//                            graphics.fillRect((j + grid.getDepth() + 1) * visScale, (grid.getDepth() - k - 1) * visScale, visScale, visScale);
+                            graphics.fillRect((j + grid.getDepth() + 1) * visScale, (k) * visScale, visScale, visScale);
                         }
                     }
 
@@ -185,24 +177,26 @@ public class Visualizer implements Observer {
                 }
             }
 
-//            graphics.setFill(Color.rgb(50, 50, 50));
-//            dodatkowo wyświetlenie środka do testów
-            k = (grid.getDepth()-1)/2;
-            for (i = 0; i < grid.getHeight(); i++) {
-                for (j = 0; j < grid.getWidth(); j++) {
-                    if (grid.cellsList[i][j][k].idGrain != 0 & grid.getGrainType(grid.cellsList[i][j][k].idGrain) == GrainType.austenite) {
-                        austenitColor.putIfAbsent(grid.cellsList[i][j][k].idGrain, this.red());
-                        graphics.setFill(austenitColor.get(grid.cellsList[i][j][k].idGrain));
-                        graphics.fillRect((j+grid.getDepth()+grid.getDepth()+grid.getWidth()+3) * visScale, (i+grid.getDepth()+grid.getHeight()+2) * visScale, visScale, visScale);
-                    }
+////            dodatkowo wyświetlenie środka do testów
+//            k = (grid.getDepth()-1)/2;
+////            k = grid.getDepth()-2;
+//
+//            for (i = 0; i < grid.getHeight(); i++) {
+//                for (j = 0; j < grid.getWidth(); j++) {
+//                    if (grid.cellsList[i][j][k].idGrain != 0 & grid.getGrainType(grid.cellsList[i][j][k].idGrain) == GrainType.austenite) {
+//                        austenitColor.putIfAbsent(grid.cellsList[i][j][k].idGrain, this.red());
+//                        graphics.setFill(austenitColor.get(grid.cellsList[i][j][k].idGrain));
+//                        graphics.fillRect((j+grid.getDepth()+grid.getDepth()+grid.getWidth()+3) * visScale, (i+grid.getDepth()+grid.getHeight()+2) * visScale, visScale, visScale);
+//                    }
+//
+//                    else if (grid.getGrainType(grid.cellsList[i][j][k].idGrain) == GrainType.ferrite) {
+//                        ferrytColor.putIfAbsent(grid.cellsList[i][j][k].idGrain, this.yellow());
+//                        graphics.setFill(ferrytColor.get(grid.cellsList[i][j][k].idGrain));
+//                        graphics.fillRect((j+grid.getDepth()+grid.getDepth()+grid.getWidth()+3) * visScale, (i+grid.getDepth()+grid.getHeight()+2) * visScale, visScale, visScale);
+//                    }
+//                }
+//            }
 
-                    else if (grid.getGrainType(grid.cellsList[i][j][k].idGrain) == GrainType.ferrite) {
-                        ferrytColor.putIfAbsent(grid.cellsList[i][j][k].idGrain, this.yellow());
-                        graphics.setFill(ferrytColor.get(grid.cellsList[i][j][k].idGrain));
-                        graphics.fillRect((j+grid.getDepth()+grid.getDepth()+grid.getWidth()+3) * visScale, (i+grid.getDepth()+grid.getHeight()+2) * visScale, visScale, visScale);
-                    }
-                }
-            }
             graphics.setFill(Color.rgb(50, 50, 50));
 
         }
@@ -230,33 +224,39 @@ public class Visualizer implements Observer {
             if(grid.getDepth()==1) {
                 graphics.fillRect(cell.getY() * visScale, cell.getX() * visScale, visScale, visScale);
             }
-            else if(cell.getX() == 0) {
-//                graphics.setFill(Color.rgb(10, 10, 10));
-                graphics.fillRect((cell.getY() + grid.getDepth() + 1) * visScale, (cell.getZ()) * visScale, visScale, visScale);
+            else if(cell.getX() == 0) { //D
+                graphics.fillRect((cell.getY() + grid.getDepth() + 1) * visScale, (grid.getDepth() - cell.getZ() - 1) * visScale, visScale, visScale);
+//                graphics.fillRect((cell.getY() + grid.getDepth() + 1) * visScale, (cell.getZ()) * visScale, visScale, visScale);
             }
-            else if(cell.getX() == grid.getHeight()-1){
+            else if(cell.getX() == grid.getHeight()-1){ //B
                 graphics.fillRect((cell.getY() + grid.getDepth() + 1) * visScale, (cell.getZ() + grid.getDepth() + grid.getHeight() + 2) * visScale, visScale, visScale);
             }
-            else if(cell.getY() == 0){
-                graphics.fillRect((cell.getZ()) * visScale, (cell.getX() + grid.getDepth() + 1) * visScale, visScale, visScale);
+            else if(cell.getY() == 0){ //C
+                graphics.fillRect((grid.getDepth() - cell.getZ() - 1) * visScale, (cell.getX() + grid.getDepth() + 1) * visScale, visScale, visScale);
+//                graphics.fillRect((cell.getZ()) * visScale, (cell.getX() + grid.getDepth() + 1) * visScale, visScale, visScale);
             }
-            else if(cell.getY() == grid.getWidth()-1){graphics.fillRect((cell.getZ() + 1 * grid.getDepth() + grid.getWidth() + 2) * visScale, (cell.getX() + grid.getDepth() + 1) * visScale, visScale, visScale);}
-            else if(cell.getZ() == 0){graphics.fillRect((cell.getY() + grid.getDepth() + 1) * visScale, (cell.getX() + grid.getDepth() + 1) * visScale, visScale, visScale);}
-            else if(cell.getZ() == grid.getDepth()-1){graphics.fillRect(((cell.getY()) + 2 * grid.getDepth() + grid.getWidth() + 3) * visScale, (cell.getX() + grid.getDepth() + 1) * visScale, visScale, visScale);}
-            else if(cell.getZ() == (grid.getDepth()-1)/2){
-                System.out.println("border w połowie: (" + cell.getX() + ", " + cell.getY() + ", " + cell.getZ()+")");
-                graphics.fillRect((cell.getY()+grid.getDepth()+grid.getDepth()+grid.getWidth()+3) * visScale, (cell.getX()+grid.getDepth()+grid.getHeight()+2) * visScale, visScale, visScale);
+            else if(cell.getY() == grid.getWidth()-1){ //E
+                graphics.fillRect((cell.getZ() + 1 * grid.getDepth() + grid.getWidth() + 2) * visScale, (cell.getX() + grid.getDepth() + 1) * visScale, visScale, visScale);
             }
+            else if(cell.getZ() == 0){ //A
+                graphics.fillRect((cell.getY() + grid.getDepth() + 1) * visScale, (cell.getX() + grid.getDepth() + 1) * visScale, visScale, visScale);
+            }
+            else if(cell.getZ() == grid.getDepth()-1){ //F
+                graphics.fillRect(((grid.getWidth() - cell.getY() - 1) + 2 * grid.getDepth() + grid.getWidth() + 3) * visScale, (cell.getX() + grid.getDepth() + 1) * visScale, visScale, visScale);
+//                graphics.fillRect(((cell.getY()) + 2 * grid.getDepth() + grid.getWidth() + 3) * visScale, (cell.getX() + grid.getDepth() + 1) * visScale, visScale, visScale);
+            }
+
+//            else if(cell.getZ() == (grid.getDepth()-1)/2) {
+////            else if(cell.getZ() == grid.getDepth()-2) {
+////                System.out.println("border w połowie: (" + cell.getX() + ", " + cell.getY() + ", " + cell.getZ()+")");
+//                graphics.fillRect((cell.getY() + grid.getDepth() + grid.getDepth() + grid.getWidth() + 3) * visScale, (cell.getX() + grid.getDepth() + grid.getHeight() + 2) * visScale, visScale, visScale);
+//            }
         }
 
     }
 
     public void canvasClear(){
-//        graphics.clearRect(0, 0, grid.getHeight()*visScale, grid.getWidth()*visScale);
-//        graphics.clearRect(0, 0, (grid.getHeight()+grid.getDepth()+ grid.getDepth())*visScale, (grid.getWidth()+grid.getWidth()+grid.getDepth()+ grid.getDepth())*visScale);
-//        graphics.clearRect(0, 0,(grid.getWidth()+grid.getWidth()+grid.getDepth()+ grid.getDepth())*visScale, (grid.getHeight()+grid.getDepth()+ grid.getDepth())*visScale);
         graphics.clearRect(0, 0,canvas.getWidth(), canvas.getHeight());
-
     }
 
 }

@@ -29,8 +29,10 @@ public class GrainGrowth extends Simulation{
 
     private boolean addRandomNewGrain(){
         Random random = new Random();
-        int x = random.nextInt(grid.getWidth());
-        int y = random.nextInt(grid.getHeight());
+//        int x = random.nextInt(grid.getWidth());
+//        int y = random.nextInt(grid.getHeight());
+        int x = random.nextInt(grid.getHeight());
+        int y = random.nextInt(grid.getWidth());
         int z = random.nextInt(grid.getDepth());
 
         if (grid.cellsList[x][y][z].idGrain == 0) {

@@ -49,8 +49,11 @@ public abstract class Simulation {
         for (int dx = -1; dx <= 1; dx++) {
             for (int dy = -1; dy <= 1; dy++) {
                 for (int dz = -1; dz <= 1; dz++) {
-                    int targetX = xCurrent + dx * grid.getWidth();
-                    int targetY = yCurrent + dy * grid.getHeight();
+//                    czy width i height na odwrót? - raczej tak
+//                    int targetX = xCurrent + dx * grid.getWidth();
+//                    int targetY = yCurrent + dy * grid.getHeight();
+                    int targetX = xCurrent + dx * grid.getHeight();
+                    int targetY = yCurrent + dy * grid.getWidth();
                     int targetZ = zCurrent + dz * grid.getDepth();
                     distances.add(Math.sqrt(Math.pow(activeCellX - targetX, 2) + Math.pow(activeCellY - targetY, 2) + Math.pow(activeCellZ - targetZ, 2)));
                 }
