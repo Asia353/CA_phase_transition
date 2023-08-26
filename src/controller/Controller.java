@@ -10,6 +10,9 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 
+import java.io.*;
+import java.util.*;
+
 public class Controller {
 
     private AppController appController;
@@ -26,10 +29,10 @@ public class Controller {
     private Grid grid;
     private Visualizer visualizer;
 
-    private int height = 80;
-    private int width = 80;
-    private int depth = 80;
-    private int numberOfGrains = 20;
+    private int height = 130;
+    private int width = 130;
+    private int depth = 130;
+    private int numberOfGrains = 50;
     private int visScale = 1;
     private int numberOfThreads = 12;
 //    0 - sekwencyjny, 1 - rónoległy, 2 - frontalny
@@ -160,6 +163,58 @@ public class Controller {
 
     }
 
+//    to do sprawdzenia
+    public void handleBtnSave(ActionEvent event) throws IOException {
+        FileWriter write = new FileWriter("initMicrostructure.txt");
+
+        write.write(String.valueOf(height) + "\n");// + System.lineSeparator());
+        write.write(String.valueOf(width) + "\n");// + System.lineSeparator());
+        write.write(String.valueOf(depth) + "\n");// + System.lineSeparator());
+
+        for (int k = 0; k < depth; k++) {
+            for (int i = 0; i < height; i++) {
+                for (int j = 0; j < width; j++) {
+                    write.write(String.valueOf(grid.cellsList[i][j][k].idGrain + ","));
+                }
+                write.write("\n");
+            }
+//            write.write("\n");
+        }
+        write.close();
+    }
+
+    public void handleBtnLoad(ActionEvent event) throws IOException {
+        Grid loadedGrid = readGrainsFromFile("initMicrostructure.txt");
+        this.grid = loadedGrid;
+        this.visualizer = new Visualizer(this.grid, this.canvas, this.visScale);
+        this.visualizer.canvasClear();
+        this.grid.addObserver(visualizer);
+        this.grid.notifyObservers();
+        textFieldC.setText(String.valueOf(grid.carbon));
+    }
+
+//    działa do zapisu początkowej mikrostruktury
+    public static Grid readGrainsFromFile(String path) throws IOException {
+        try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
+            int height = Integer.parseInt(reader.readLine());
+            int width = Integer.parseInt(reader.readLine());
+            int depth = Integer.parseInt(reader.readLine());
+
+            int[][][] loadedCellStates = new int[height][width][depth];
+
+            for (int k = 0; k < depth; k++) {
+                for (int i = 0; i < height; i++) {
+                    String currentLine = reader.readLine();
+                    String[] tokens = currentLine.split(",");
+                    for (int j = 0; j < width; j++) {
+                        loadedCellStates[i][j][k] = Integer.parseInt(tokens[j]);
+                    }
+                }
+            }
+            return new Grid(height, width, depth, loadedCellStates);
+        }
+    }
+
 //private void growTimer() {
 //
 //    animationTimer = new AnimationTimer() {
@@ -203,55 +258,6 @@ public class Controller {
 //            }
 //
 //        };
-//    }
-
-//    to do sprawdzenia
-//    public void handleBtnSave(ActionEvent event) throws IOException {
-//        FileWriter write = new FileWriter("initMicrostructure.txt");
-//
-//        write.write(String.valueOf(height) + "\n");// + System.lineSeparator());
-//        write.write(String.valueOf(width)  + "\n");// + System.lineSeparator());
-//
-//        for(int i = 0; i < height; i++) {
-//            for (int j = 0; j < width; j++) {
-//                for (int k = 0; k < width; k++) {
-//
-//                    write.write(String.valueOf(grid.cellsList[i][j][k].idGrain + ","));
-//                }
-//                write.write("\n");
-//            }
-//        }
-//
-//        write.close();
-//    }
-
-//    public void handleBtnLoad(ActionEvent event) throws IOException {
-//        Grid loadedGrid = readGrainsFromFile("initMicrostructure.txt");
-//        this.grid = loadedGrid;
-//        this.visualizer = new Visualizer(this.grid, this.canvas, this.visScale);
-//        this.visualizer.canvasClear();
-//        this.grid.addObserver(visualizer);
-//        this.grid.notifyObservers();
-//        textFieldC.setText(String.valueOf(grid.carbon));
-//    }
-
-
-
-//    tu też do sprawdzenia
-//    public static Grid readGrainsFromFile(String path) throws IOException {
-//        BufferedReader reader = new BufferedReader(new FileReader(path));
-//
-//        int height = Integer.parseInt(reader.readLine());
-//        int width = Integer.parseInt(reader.readLine());
-//        int depth = Integer.parseInt(reader.readLine());
-//
-//        List<List<Integer>> loadedCellStates = new LinkedList<>();
-//
-//        for(int i = 0; i < height; i++){
-//            String currentLine = reader.readLine();
-//            loadedCellStates.add(Arrays.stream(currentLine.split(",")).filter(token -> token.length() > 0).map(Integer::parseInt).toList());
-//        }
-//        return new Grid(height, width, depth, loadedCellStates);
 //    }
 
 }

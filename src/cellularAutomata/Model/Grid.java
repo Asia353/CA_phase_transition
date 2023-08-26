@@ -56,47 +56,46 @@ public class Grid {
         this.iterationSimulation = 0;
     }
 
-//    public Grid(int height, int width, int depth, List<List<Integer>> simulationState) {
-//
-//        this.height = height;
-//        this.width = width;
-//        this.depth = depth;
-//
-//        this.grainsList = new HashMap<>();
-//        this.grainsList.put(0, new Grain(0, GrainType.austenite, 0, 0, 0, 0));
-//
-////        do sprawdzenia
-//        for(var row: simulationState) {
-//            for(var cell: row) {
-//                grainsList.putIfAbsent(cell, new Grain(cell, GrainType.austenite, 0, 0, 0, 0.5));
-//                grainsList.get(cell).addCell(0.5);
-//            }
-//        }
-//
-//        this.cellsList = new Cell[this.height][this.width][this.depth];
-//        this.nextCellsList = new Cell[this.height][this.width][this.depth];
-//
-//        // tutaj zmodyfikuj dla 3 wymiarów
-//        int i = 0, j, k;
-//        for(var row: simulationState) {
-//            j = 0;
-//            for(var cell: row) {
-//                cellsList[i][j] = new Cell(i, j, cell);
-//                j++;
-//            }
-//            i++;
-//        }
-//
-//        this.grainGrowth = new GrainGrowth(this);
-//
-//        this.observersList = new ArrayList<>();
-//
-//        this.iterationSimulation = 0;
-//
-//        this.austeniteFerriteTransformation = new AusteniteFerriteTransformation(this);
-//        this.austenitePearliteTransformation = new AustenitePearliteTransformation(this);
-//
-//    }
+    public Grid(int height, int width, int depth, int[][][] simulationState) {
+
+        this.height = height;
+        this.width = width;
+        this.depth = depth;
+
+        this.grainsList = new HashMap<>();
+        this.grainsList.put(0, new Grain(0, GrainType.austenite, 0, 0, 0, 0));
+
+        this.cellsList = new Cell[this.height][this.width][this.depth];
+        this.cellsListFCA = new ArrayList<>();
+
+        this.nextCellsList = new Cell[this.height][this.width][this.depth];
+
+        // Tutaj zmodyfikuj dla 3 wymiarów
+        for (int k = 0; k < this.depth; k++) {
+            for (int i = 0; i < this.height; i++) {
+                for (int j = 0; j < this.width; j++) {
+                    int cellID = simulationState[i][j][k];
+                    grainsList.putIfAbsent(cellID, new Grain(cellID, GrainType.austenite, i, j, k, this.carbon));
+                    if (cellID == 0) {
+                        this.cellsList[i][j][k] = new Cell(i,j,k);
+//                        grainsList.get(cellID).addCell(this.carbon);
+                    }
+                    else {
+                        grainsList.get(cellID).addCell(this.carbon);
+                        cellsList[i][j][k] = new Cell(i, j, k, cellID);
+                        this.cellsListFCA.add(this.cellsList[i][j][k]);
+                    }
+                }
+            }
+        }
+
+        this.observersList = new ArrayList<>();
+
+        this.iterationSimulation = 0;
+
+        this.grainGrowth = new GrainGrowth(this);
+        this.austeniteFerriteTransformation = new AusteniteFerriteTransformation(this);
+    }
 
     public void notifyObservers() {
         for (Observer observer : this.observersList) {
@@ -211,10 +210,6 @@ public class Grid {
             }
         }
     }
-
-//    public void countBorderStateAustenitePearlite(){
-//        austeniteFerriteTransformation.addCellState();
-//    }
 
     public GrainType getGrainType(int id){
         return grainsList.get(id).getGrainType();
