@@ -1,8 +1,7 @@
 package cellularAutomata.Model;
 
 import Utils.Observer;
-import cellularAutomata.Simulation.AusteniteFerriteTransformation;
-import cellularAutomata.Simulation.GrainGrowth;
+import cellularAutomata.Simulation.*;
 import javafx.animation.AnimationTimer;
 
 import java.util.*;
@@ -33,6 +32,9 @@ public class Grid {
     private int iterations;
 
     public double carbon = 0.5;
+    public int parallelDecompositionType = 1; // row, 2 - column
+
+//    public ParallelDecomposition parallelDecomposition;
 
     public Grid(int height, int width, int depth, int numberOfGrainsAustenite) {
 
@@ -140,7 +142,12 @@ public class Grid {
     }
 
     public void grainGrowthSimulationRunParallel(int numberOfThreads){
-        grainGrowth.growParallel(numberOfThreads);
+        if(this.parallelDecompositionType == 1) {
+            grainGrowth.growParallel(numberOfThreads, new RowDecomposition());
+        }
+        else if(this.parallelDecompositionType == 2){
+            grainGrowth.growParallel(numberOfThreads, new ColumnDecomposition());
+        }
     }
 
     public void grainGrowthSimulationRunFCA(){

@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 public class GrainGrowth extends Simulation{
 
-    private boolean run = true;
+    public boolean run = true;
     private ExecutorService executorService;
 
 
@@ -98,8 +98,7 @@ public class GrainGrowth extends Simulation{
         grid.iterationSimulation++;
     }
 
-//    @Override
-    public void growParallel(int numberOfThreads){
+    public void growParallel(int numberOfThreads, ParallelDecomposition decomposition){
         grid.nextCellsList = new Cell[grid.getHeight()][grid.getWidth()][grid.getDepth()];
 
         this.run = false;
@@ -110,36 +109,7 @@ public class GrainGrowth extends Simulation{
         for (int task = 0; task < threats; task++) {
             int n = task;
             tasks.add(() -> {
-                for (int i = n * grid.getHeight() / threats; i < (n + 1) * grid.getHeight() / threats; i++) {
-//                for (int i = 0; i < grid.getHeight(); i++) {
-                    for (int j = 0; j < grid.getWidth(); j++) {
-
-                        for (int k = 0; k < grid.getDepth(); k++) {
-
-                            grid.nextCellsList[i][j][k] = new Cell(grid.cellsList[i][j][k]);
-
-                            if (grid.cellsList[i][j][k].cellState != CellState.active) {
-                                this.run = true;
-
-                                int newId = findNewId(i, j, k);
-
-                                if (newId != 0) {
-                                    grid.nextCellsList[i][j][k].cellState = CellState.pending;
-                                    grid.nextCellsList[i][j][k].idGrain = newId;
-                                    grid.nextCellsList[i][j][k].time = countDistance(grid.nextCellsList[i][j][k], i, j, k);
-                                }
-
-                                if (grid.nextCellsList[i][j][k].cellState == CellState.pending) {
-
-                                    if (((int) Math.ceil(grid.nextCellsList[i][j][k].time)) <= grid.iterationSimulation) {
-                                        grid.nextCellsList[i][j][k].cellState = CellState.active;
-                                        grid.grainsList.get(grid.nextCellsList[i][j][k].idGrain).addCell(grid.carbon); //zliczanie komórek w ziarnie
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+                decomposition.decomposeAndExecute(n, threats, grid, this);
             });
         }
 
@@ -158,6 +128,66 @@ public class GrainGrowth extends Simulation{
 
         grid.iterationSimulation++;
     }
+
+//    public void growParallel(int numberOfThreads){
+//        grid.nextCellsList = new Cell[grid.getHeight()][grid.getWidth()][grid.getDepth()];
+//
+//        this.run = false;
+//
+//        int threats = numberOfThreads;
+//        List<Runnable> tasks = new ArrayList<>(threats);
+//
+//        for (int task = 0; task < threats; task++) {
+//            int n = task;
+//            tasks.add(() -> {
+//                for (int i = n * grid.getHeight() / threats; i < (n + 1) * grid.getHeight() / threats; i++) {
+////                for (int i = 0; i < grid.getHeight(); i++) {
+//                    for (int j = 0; j < grid.getWidth(); j++) {
+//
+//                        for (int k = 0; k < grid.getDepth(); k++) {
+//
+//                            grid.nextCellsList[i][j][k] = new Cell(grid.cellsList[i][j][k]);
+//
+//                            if (grid.cellsList[i][j][k].cellState != CellState.active) {
+//                                this.run = true;
+//
+//                                int newId = findNewId(i, j, k);
+//
+//                                if (newId != 0) {
+//                                    grid.nextCellsList[i][j][k].cellState = CellState.pending;
+//                                    grid.nextCellsList[i][j][k].idGrain = newId;
+//                                    grid.nextCellsList[i][j][k].time = countDistance(grid.nextCellsList[i][j][k], i, j, k);
+//                                }
+//
+//                                if (grid.nextCellsList[i][j][k].cellState == CellState.pending) {
+//
+//                                    if (((int) Math.ceil(grid.nextCellsList[i][j][k].time)) <= grid.iterationSimulation) {
+//                                        grid.nextCellsList[i][j][k].cellState = CellState.active;
+//                                        grid.grainsList.get(grid.nextCellsList[i][j][k].idGrain).addCell(grid.carbon); //zliczanie komórek w ziarnie
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            });
+//        }
+//
+//        try {
+//            executorService.invokeAll(tasks.stream().map(Executors::callable).collect(Collectors.toList()));
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//
+//        grid.cellsList = grid.nextCellsList;
+//
+//        if(!this.run) {
+//            addCellState();
+//            grid.iterationSimulation = 0;
+//        }
+//
+//        grid.iterationSimulation++;
+//    }
 
     public void dodajSasiadowDoListy(Cell cell){
         //        sąsiedztwo moore'a

@@ -25,14 +25,16 @@ public class Controller {
     private TextField textFieldC;
     @FXML
     private ComboBox<String> comboBoxOptions;
+    @FXML
+    private ComboBox<String> comboBoxParallel;
 
     private Grid grid;
     private Visualizer visualizer;
 
-    private int height = 130;
-    private int width = 130;
-    private int depth = 130;
-    private int numberOfGrains = 50;
+    private int height = 100;
+    private int width = 100;
+    private int depth = 100;
+    private int numberOfGrains = 100;
     private int visScale = 1;
     private int numberOfThreads = 12;
 //    0 - sekwencyjny, 1 - rónoległy, 2 - frontalny
@@ -81,6 +83,20 @@ public class Controller {
         });
     }
 
+//    public void parallelDecomposition() {
+//        comboBoxParallel.setOnAction(event -> {
+//            String selectedOption = comboBoxParallel.getValue();
+//            if (selectedOption.equals("row")) {
+//                grid.parallelDecompositionType = 1;
+//            } else if (selectedOption.equals("column")) {
+//                grid.parallelDecompositionType = 2;
+//            }
+////            else if (selectedOption.equals("frontal cellular automata")) {
+////                this.simulationType = 3;
+////            }
+//        });
+//    }
+
     public void handleBtnOneStep(ActionEvent event) {
         grid.grainGrowthOneStep();
     }
@@ -96,7 +112,7 @@ public class Controller {
             }
         }
         else if(this.simulationType == 1) {
-            System.out.println("Automat komórkowy równoległy (wątki: " + this.numberOfThreads + ")");
+            System.out.println("Automat komórkowy równoległy (wątki: " + this.numberOfThreads + ", dekompozycja: " + grid.parallelDecompositionType +  " (1-row, 2-column))");
             while (grid.grainGrowthRun()) {
                 grid.grainGrowthSimulationRunParallel(this.numberOfThreads);
             }
@@ -191,6 +207,7 @@ public class Controller {
         this.grid.addObserver(visualizer);
         this.grid.notifyObservers();
         textFieldC.setText(String.valueOf(grid.carbon));
+        System.out.println("Mikrostruktura zaczytana z pliku \"initMicrostructure.txt\" ");
     }
 
 //    działa do zapisu początkowej mikrostruktury
