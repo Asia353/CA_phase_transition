@@ -90,12 +90,13 @@ public class GrainGrowth extends Simulation{
 
         grid.cellsList = grid.nextCellsList;
 
+
+        grid.iterationSimulation++;
+
         if(!this.run) {
             addCellState();
             grid.iterationSimulation = 0;
         }
-
-        grid.iterationSimulation++;
     }
 
     public void growParallel(int numberOfThreads, ParallelDecomposition decomposition){
@@ -121,12 +122,12 @@ public class GrainGrowth extends Simulation{
 
         grid.cellsList = grid.nextCellsList;
 
+        grid.iterationSimulation++;
+
         if(!this.run) {
             addCellState();
             grid.iterationSimulation = 0;
         }
-
-        grid.iterationSimulation++;
     }
 
 //    public void growParallel(int numberOfThreads){
@@ -248,12 +249,12 @@ public class GrainGrowth extends Simulation{
         grid.cellsList = grid.nextCellsList;
         grid.cellsListFCA = grid.nextCellsListFCA;
 
+        grid.iterationSimulation++;
+
         if(!this.run) {
             addCellState();
             grid.iterationSimulation = 0;
         }
-
-        grid.iterationSimulation++;
     }
 
 //    @Override

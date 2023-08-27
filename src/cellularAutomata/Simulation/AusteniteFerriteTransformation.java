@@ -21,6 +21,7 @@ public class AusteniteFerriteTransformation extends Simulation{
 
     @Override
     public void initGrains() {
+        grid.cellsListFCA = new ArrayList<>();
 
         System.out.println("Sprawdzenie czy na pewno lista z zianrami pending jest pusta: " + grid.cellsListFCA.size());
         grid.countBorderStateAustenit();
@@ -184,7 +185,6 @@ public class AusteniteFerriteTransformation extends Simulation{
 
     public void dodajSasiadowDoListy(Cell cell){
         //        sąsiedztwo moore'a
-        Map<Integer, Double> neighbours = new HashMap<>();
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 for (int k = -1; k <= 1; k++) {
