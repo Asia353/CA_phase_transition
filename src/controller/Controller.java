@@ -31,9 +31,9 @@ public class Controller {
     private Grid grid;
     private Visualizer visualizer;
 
-    private int height = 100;
-    private int width = 100;
-    private int depth = 100;
+    private int height = 120;
+    private int width = 120;
+    private int depth = 120;
     private int numberOfGrains = 100;
     private int visScale = 1;
     private int numberOfThreads = 12;

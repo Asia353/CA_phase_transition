@@ -32,7 +32,7 @@ public class Grid {
     private int iterations;
 
     public double carbon = 0.5;
-    public int parallelDecompositionType = 1; // row, 2 - column
+    public int parallelDecompositionType = 1; // row, 2 - column, 3-cube
 
 //    public ParallelDecomposition parallelDecomposition;
 
@@ -148,6 +148,9 @@ public class Grid {
         else if(this.parallelDecompositionType == 2){
             grainGrowth.growParallel(numberOfThreads, new ColumnDecomposition());
         }
+        else if(this.parallelDecompositionType == 3){
+            grainGrowth.growParallel(numberOfThreads, new CubeDecomposition());
+        }
     }
 
     public void grainGrowthSimulationRunFCA(){
@@ -165,7 +168,15 @@ public class Grid {
     }
 
     public void austeniteFerriteSimulationRunParallel(int numberOfThreads){
-        austeniteFerriteTransformation.growParallel(numberOfThreads);
+        if(this.parallelDecompositionType == 1) {
+            austeniteFerriteTransformation.growParallel(numberOfThreads, new RowDecomposition());
+        }
+        else if(this.parallelDecompositionType == 2){
+            austeniteFerriteTransformation.growParallel(numberOfThreads, new ColumnDecomposition());
+        }
+        else if(this.parallelDecompositionType == 3){
+            austeniteFerriteTransformation.growParallel(numberOfThreads, new CubeDecomposition());
+        }
     }
 
     public void austeniteFerriteSimulationRunFCA(){
