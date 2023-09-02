@@ -9,7 +9,7 @@ public class CubeDecomposition implements ParallelDecomposition {
 
     @Override
     public void decomposeAndExecute(int task, int totalThreads, Grid grid, GrainGrowth grainGrowth) {
-        System.out.println("Dekompozycja blokowa rozrost");
+//        System.out.println("Dekompozycja blokowa rozrost");
         int w, h, d;
         if (totalThreads == 12) {
             h = 3;
@@ -61,7 +61,7 @@ public class CubeDecomposition implements ParallelDecomposition {
 
     @Override
     public void decomposeAndExecuteFerrite(int task, int totalThreads, Grid grid, AusteniteFerriteTransformation austeniteFerriteTransformation) {
-        System.out.println("Dekompozycja blokowa fca");
+//        System.out.println("Dekompozycja blokowa fca");
         int w, h, d;
         if (totalThreads == 12) {
             h = 3;

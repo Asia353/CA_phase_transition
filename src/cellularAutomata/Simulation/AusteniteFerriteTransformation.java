@@ -27,7 +27,7 @@ public class AusteniteFerriteTransformation extends Simulation{
         grid.countBorderStateAustenit();
         Collections.shuffle(grid.cellsListOnTheBorder);
 
-//        numberOfFerriteGrains = grid.cellsListOnTheBorder.size() * 0.1; //domyślnie
+//        numberOfFerriteGrains = grid.cellsListOnTheBorder.size() * 0.1; //domyślnie do 2D
         numberOfFerriteGrains = grid.cellsListOnTheBorder.size() * 0.01; //3D
 
         System.out.println("number of ferrite: " + numberOfFerriteGrains );

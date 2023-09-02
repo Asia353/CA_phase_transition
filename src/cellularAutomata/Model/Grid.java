@@ -44,7 +44,7 @@ public class Grid {
         this.numberOfGrainsAustenite = numberOfGrainsAustenite;
 
         this.cellsList = new Cell[this.height][this.width][this.depth];
-        this.cellsListFCA = new ArrayList<>();
+        this.cellsListFCA = new LinkedList<>();
         initGrid();
 
         this.grainsList = new HashMap<>();
@@ -68,7 +68,7 @@ public class Grid {
         this.grainsList.put(0, new Grain(0, GrainType.austenite, 0, 0, 0, 0));
 
         this.cellsList = new Cell[this.height][this.width][this.depth];
-        this.cellsListFCA = new ArrayList<>();
+        this.cellsListFCA = new LinkedList<>();
 
         this.nextCellsList = new Cell[this.height][this.width][this.depth];
 

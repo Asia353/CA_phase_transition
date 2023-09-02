@@ -11,7 +11,7 @@ import java.util.List;
 public class RowDecomposition implements ParallelDecomposition {
     @Override
     public void decomposeAndExecute(int task, int totalThreads, Grid grid, GrainGrowth grainGrowth) {
-        System.out.println("Dekompozycja wierszowa rozrost");
+//        System.out.println("Dekompozycja wierszowa rozrost");
         for (int i = task * grid.getHeight() / totalThreads; i < (task + 1) * grid.getHeight() / totalThreads; i++) {
             for (int j = 0; j < grid.getWidth(); j++) {
                 for (int k = 0; k < grid.getDepth(); k++) {
@@ -44,7 +44,7 @@ public class RowDecomposition implements ParallelDecomposition {
 
     @Override
     public void decomposeAndExecuteFerrite(int task, int totalThreads, Grid grid, AusteniteFerriteTransformation austeniteFerriteTransformation) {
-        System.out.println("Dekompozycja wierszowa fca");
+//        System.out.println("Dekompozycja wierszowa fca");
         for (int i = task * grid.getHeight() / totalThreads; i < (task + 1) * grid.getHeight() / totalThreads; i++) {
             for (int j = 0; j < grid.getWidth(); j++) {
                 for (int k = 0; k < grid.getDepth(); k++) {
