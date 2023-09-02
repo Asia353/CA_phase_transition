@@ -30,7 +30,7 @@ public class AusteniteFerriteTransformation extends Simulation{
 //        numberOfFerriteGrains = grid.cellsListOnTheBorder.size() * 0.1; //domyślnie do 2D
         numberOfFerriteGrains = grid.cellsListOnTheBorder.size() * 0.01; //3D
 
-        System.out.println("number of ferrite: " + numberOfFerriteGrains );
+//        System.out.println("number of ferrite: " + numberOfFerriteGrains );
 
         for (int i = 0; i < numberOfFerriteGrains; ) {
 
@@ -145,74 +145,7 @@ public class AusteniteFerriteTransformation extends Simulation{
 //        System.out.println("iteracja symulacji: " + grid.iterationSimulation);
     }
 
-//    public void growParallel(int numberOfThreads, ParallelDecomposition decomposition){
-//
-//        for(int i = 0; i < grid.grainsList.size(); i++) {
-//            grid.grainsList.get(i).iteration++;
-//        }
-//
-//        this.run = false;
-//
-//        int threats = numberOfThreads;
-//        List<Runnable> tasks = new ArrayList<>(threats);
-//
-//        for (int task = 0; task < threats; task++) {
-//            int n = task;
-//            tasks.add(() -> {
-//                for (int i = n * grid.getHeight() / threats; i < (n + 1) * grid.getHeight() / threats; i++) {
-//                    for (int j = 0; j < grid.getWidth(); j++) {
-//                        for (int k = 0; k < grid.getDepth(); k++) {
-//
-//                            grid.nextCellsList[i][j][k] = new Cell(grid.cellsList[i][j][k]);
-//
-//                            int currentGrainID = grid.cellsList[i][j][k].idGrain;
-//                            Cell currentCell = grid.cellsList[i][j][k];
-//
-//                            if (currentCell.getGrainType(grid) == GrainType.austenite && grid.grainsList.get(currentGrainID).getCarbonConcentration() < 0.77) {
-//
-//                                int newId = findNewId(i, j, k);
-//
-//                                if (newId != currentGrainID) {
-//
-//                                    this.run = true;
-//
-////                            currentCell?
-//                                    grid.grainsList.get(grid.cellsList[i][j][k].idGrain).deleteCell(this.ferrytCarbon);
-//                                    grid.grainsList.get(newId).addCell(this.ferrytCarbon);
-//
-//                                    grid.nextCellsList[i][j][k].cellState = CellState.pending;
-//                                    grid.nextCellsList[i][j][k].idGrain = newId;
-//                                    grid.nextCellsList[i][j][k].time = countDistance(grid.nextCellsList[i][j][k], i, j, k);
-//
-//                                }
-//                            }
-//
-//                            if (grid.nextCellsList[i][j][k].cellState == CellState.pending) {
-//
-//                                this.run = true;
-//
-//                                if (((int) Math.ceil(grid.nextCellsList[i][j][k].time)) <= grid.grainsList.get(grid.nextCellsList[i][j][k].idGrain).iteration) {
-//                                    grid.nextCellsList[i][j][k].cellState = CellState.active;
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//            });
-//        }
-//        try {
-//            executorService.invokeAll(tasks.stream().map(Executors::callable).collect(Collectors.toList()));
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//
-//        grid.cellsList = grid.nextCellsList;
-//
-//        grid.iterationSimulation++;
-////        System.out.println("iteracja symulacji: " + grid.iterationSimulation);
-//    }
-
-    public void dodajSasiadowDoListy(Cell cell){
+    public void addNeighborsToTheFrontList(Cell cell){
         //        sąsiedztwo moore'a
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
@@ -259,13 +192,13 @@ public class AusteniteFerriteTransformation extends Simulation{
             this.run = true;
 
             if(grid.iterationSimulation == 0) {
-                dodajSasiadowDoListy(cell);
+                addNeighborsToTheFrontList(cell);
             }
 
             else if (cell.cellState == CellState.pending) {
                 if (((int) Math.ceil(cell.time)) <= grid.iterationSimulation) {
                     grid.nextCellsList[cell.getX()][cell.getY()][cell.getZ()].cellState = CellState.active;
-                    dodajSasiadowDoListy(cell);
+                    addNeighborsToTheFrontList(cell);
                 }
                 else {
                     grid.nextCellsListFCA.add(cell);
@@ -298,44 +231,6 @@ public class AusteniteFerriteTransformation extends Simulation{
             }
         }
         return grid.cellsList[x][y][z].idGrain;
-    }
-
-    public void addCellState() {
-//        ziarno znajduje się na granicy jeśli jest austenitem (bo komórka austenitu zamienia się w perlit)
-//        oraz przynajmnej jeden z jego sąsiadów jest perlitem
-
-        grid.cellsListOnTheBorder = new ArrayList<>();
-
-        for (int i = 0; i < grid.getHeight(); i++) {
-            for (int j = 0; j < grid.getWidth(); j++) {
-                for (int k = 0; k < grid.getDepth(); k++) {
-
-                    if (grid.cellsList[i][j][k].getGrainType(grid) == GrainType.austenite) {
-
-                        if (ferriteInNeighbourhood(i, j, k)) {
-                            grid.cellsListOnTheBorder.add(grid.cellsList[i][j][k]);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private boolean ferriteInNeighbourhood(int i, int j, int k){
-        for (int m = -1; m <= 1; m++) {
-            for (int n = -1; n <= 1; n++) {
-                for (int o = -1; o <= 1; o++) {
-                    int X = (grid.getHeight() + i + m) % grid.getHeight();
-                    int Y = (grid.getWidth() + j + n) % grid.getWidth();
-                    int Z = (grid.getDepth() + k + o) % grid.getDepth();
-//                granica austenit-austenit oraz austenit-ferrt
-                    if (grid.cellsList[i][j][k].idGrain != grid.cellsList[X][Y][Z].idGrain) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
     }
 
     public boolean isRun() {

@@ -38,11 +38,10 @@ public class Visualizer implements Observer {
         this.visScale = visScale;
     }
 
-//    chyba ok
     private void showGrid() {
         canvasClear();
 
-        int i, j, k = 0;
+        int i, j, k;
 //        i - hight, j-width
 
         if (grid.getDepth() == 1) {
@@ -65,9 +64,6 @@ public class Visualizer implements Observer {
             graphics.setFill(Color.rgb(50, 50, 50));
         } else {
             //for z = 0 & z = depth - 1;
-            k = 0;
-            j = 0;
-            i = 0;
 
             for (i = 0; i < grid.getHeight(); i++) {
                 for (j = 0; j < grid.getWidth(); j++) {
@@ -225,14 +221,12 @@ public class Visualizer implements Observer {
             }
             else if(cell.getX() == 0) { //D
                 graphics.fillRect((cell.getY() + grid.getDepth() + 1) * visScale, (grid.getDepth() - cell.getZ() - 1) * visScale, visScale, visScale);
-//                graphics.fillRect((cell.getY() + grid.getDepth() + 1) * visScale, (cell.getZ()) * visScale, visScale, visScale);
             }
             else if(cell.getX() == grid.getHeight()-1){ //B
                 graphics.fillRect((cell.getY() + grid.getDepth() + 1) * visScale, (cell.getZ() + grid.getDepth() + grid.getHeight() + 2) * visScale, visScale, visScale);
             }
             else if(cell.getY() == 0){ //C
                 graphics.fillRect((grid.getDepth() - cell.getZ() - 1) * visScale, (cell.getX() + grid.getDepth() + 1) * visScale, visScale, visScale);
-//                graphics.fillRect((cell.getZ()) * visScale, (cell.getX() + grid.getDepth() + 1) * visScale, visScale, visScale);
             }
             else if(cell.getY() == grid.getWidth()-1){ //E
                 graphics.fillRect((cell.getZ() + 1 * grid.getDepth() + grid.getWidth() + 2) * visScale, (cell.getX() + grid.getDepth() + 1) * visScale, visScale, visScale);
@@ -242,7 +236,6 @@ public class Visualizer implements Observer {
             }
             else if(cell.getZ() == grid.getDepth()-1){ //F
                 graphics.fillRect(((grid.getWidth() - cell.getY() - 1) + 2 * grid.getDepth() + grid.getWidth() + 3) * visScale, (cell.getX() + grid.getDepth() + 1) * visScale, visScale, visScale);
-//                graphics.fillRect(((cell.getY()) + 2 * grid.getDepth() + grid.getWidth() + 3) * visScale, (cell.getX() + grid.getDepth() + 1) * visScale, visScale, visScale);
             }
 
 //            else if(cell.getZ() == (grid.getDepth()-1)/2) {

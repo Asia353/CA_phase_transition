@@ -40,8 +40,6 @@ public class Controller {
 //    0 - sekwencyjny, 1 - rónoległy, 2 - frontalny
     private int simulationType = 0;
 
-    private AnimationTimer animationTimer;
-
     public void setAppController(AppController appController) {
         this.appController = appController;
 //        this.canvas.setHeight((height+depth+depth+2) * visScale);
@@ -64,7 +62,6 @@ public class Controller {
         long executionTime = (System.currentTimeMillis() - millisActualTime);
         System.out.println("Czas inicjalizacji rozrostu: " + executionTime * 0.001);
 
-//        growTimer();
     }
 
     public void initialize() {
@@ -102,7 +99,6 @@ public class Controller {
     }
 
     public void handleBtnRun(ActionEvent event) {
-//        animationTimer.start();
         long millisActualTime = System.currentTimeMillis(); // początkowy czas w milisekundach.
 
         if(this.simulationType == 0) {
@@ -112,7 +108,7 @@ public class Controller {
             }
         }
         else if(this.simulationType == 1) {
-            System.out.println("Automat komórkowy równoległy (wątki: " + this.numberOfThreads + ", dekompozycja: " + grid.parallelDecompositionType +  " (1-row, 2-column))");
+            System.out.println("Automat komórkowy równoległy (wątki: " + this.numberOfThreads + ", dekompozycja: " + grid.parallelDecompositionType +  " (1-row, 2-column, 3-cube))");
             while (grid.grainGrowthRun()) {
                 grid.grainGrowthSimulationRunParallel(this.numberOfThreads);
             }
@@ -131,14 +127,9 @@ public class Controller {
 
     }
 
-    public void handleBtnStop(ActionEvent event) {
-    animationTimer.stop();
-}
-
     public void handleBtnBorder(ActionEvent event) {
         visualizer.printBorder();
     }
-
 
     public void TextFieldCHandle(ActionEvent event) {
         grid.correctCarbon(Double.parseDouble(this.textFieldC.getText()));
@@ -172,14 +163,10 @@ public class Controller {
 
         long executionTime = (System.currentTimeMillis() - millisActualTime);
         System.out.println("Czas austenit-ferryt: " + executionTime * 0.001);
-//        this.ferriteTimer();
 
-//        animationTimer.start();
         grid.notifyObservers();
-
     }
 
-//    to do sprawdzenia
     public void handleBtnSave(ActionEvent event) throws IOException {
         FileWriter write = new FileWriter("initMicrostructure.txt");
 
@@ -210,7 +197,6 @@ public class Controller {
         System.out.println("Mikrostruktura zaczytana z pliku \"initMicrostructure.txt\" ");
     }
 
-//    działa do zapisu początkowej mikrostruktury
     public static Grid readGrainsFromFile(String path) throws IOException {
         try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
             int height = Integer.parseInt(reader.readLine());
@@ -231,50 +217,5 @@ public class Controller {
             return new Grid(height, width, depth, loadedCellStates);
         }
     }
-
-//private void growTimer() {
-//
-//    animationTimer = new AnimationTimer() {
-//
-//        @Override
-//        public void handle(long l) {
-//            if (!grid.grainGrowthRun()) {
-//                animationTimer.stop();
-//            }
-//            grid.grainGrowSimulationRun();
-//        }
-//
-//    };
-//}
-
-//    private void ferriteTimer() {
-//
-//        animationTimer = new AnimationTimer() {
-//
-//            @Override
-//            public void handle(long l) {
-//                if (!grid.austeniteFerriteRun()) {
-//                    animationTimer.stop();
-//                }
-//                grid.austeniteFerriteSimulationRun();
-//            }
-//
-//        };
-//    }
-
-//    private void pearliteTimer() {
-//
-//        animationTimer = new AnimationTimer() {
-//
-//            @Override
-//            public void handle(long l) {
-//                if (!grid.austenitePearliteRun()) {
-//                    animationTimer.stop();
-//                }
-//                grid.austenitePearliteSimulationRun();
-//            }
-//
-//        };
-//    }
 
 }

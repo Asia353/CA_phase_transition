@@ -14,7 +14,6 @@
 
 <Pane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
    <children>
-<!--      <Pane cache="true" prefHeight="850.0" prefWidth="1100.0" style="-fx-background-color: EDF2F7;">-->
       <Pane cache="true" prefHeight="850.0" prefWidth="1075.0" style="-fx-background-color: E1E7D8;">
 
          <children>
@@ -64,11 +63,10 @@
                   <Button fx:id="btnInit" layoutY="75.0" mnemonicParsing="false" onAction="#handleBtnInit" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: ffffff; -fx-background-color: ffffff; -fx-border-color: ffffff; -fx-border-width: 2; -fx-border-style: solid none solid none;" text="Initialize microstructure" textAlignment="CENTER" wrapText="true" />
                   <TextField fx:id="textFieldC" layoutY="475.0" onAction="#TextFieldCHandle" prefHeight="50.0" prefWidth="200.0" promptText="C [%]" style="-fx-background-color: ffffff; -fx-border-color: ffffff; -fx-border-width: 2; -fx-border-style: solid none none none;" />
                   <Button fx:id="btnRun" layoutY="125.0" mnemonicParsing="false" onAction="#handleBtnRun" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: ffffff; -fx-border-color: A5B78A; -fx-border-width: 2; -fx-border-style: solid none none none;" text="Run" textAlignment="CENTER" wrapText="true" />
-                  <Button fx:id="btnStop" layoutY="175.0" mnemonicParsing="false" onAction="#handleBtnStop" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: ffffff; -fx-border-color: A5B78A; -fx-border-width: 2; -fx-border-style: solid none none none;" text="Stop" textAlignment="CENTER" wrapText="true" />
-                  <Button fx:id="btnBorder" layoutY="225.0" mnemonicParsing="false" onAction="#handleBtnBorder" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: ffffff; -fx-border-color: A5B78A; -fx-border-width: 2; -fx-border-style: solid none none none;" text="Border" textAlignment="CENTER" wrapText="true" />
-                  <Button fx:id="btnFerrite" layoutY="275.0" mnemonicParsing="false" onAction="#handleBtnFerrite" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: ffffff; -fx-border-color: A5B78A; -fx-border-width: 2; -fx-border-style: solid none none none;" text="Ferrite" textAlignment="CENTER" wrapText="true" />
-                  <Button fx:id="btnPearlite" layoutY="325.0" mnemonicParsing="false" onAction="#handleBtnSave" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: ffffff; -fx-border-color: A5B78A; -fx-border-width: 2; -fx-border-style: solid none none none;" text="Save" textAlignment="CENTER" wrapText="true" />
-                  <Button fx:id="btnRead" layoutY="375.0" mnemonicParsing="false" onAction="#handleBtnLoad" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: ffffff; -fx-border-color: A5B78A; -fx-border-width: 2; -fx-border-style: solid none none none;" text="Load" textAlignment="CENTER" wrapText="true" />
+                  <Button fx:id="btnBorder" layoutY="175.0" mnemonicParsing="false" onAction="#handleBtnBorder" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: ffffff; -fx-border-color: A5B78A; -fx-border-width: 2; -fx-border-style: solid none none none;" text="Border" textAlignment="CENTER" wrapText="true" />
+                  <Button fx:id="btnFerrite" layoutY="225.0" mnemonicParsing="false" onAction="#handleBtnFerrite" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: ffffff; -fx-border-color: A5B78A; -fx-border-width: 2; -fx-border-style: solid none none none;" text="Ferrite" textAlignment="CENTER" wrapText="true" />
+                  <Button fx:id="btnPearlite" layoutY="275.0" mnemonicParsing="false" onAction="#handleBtnSave" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: ffffff; -fx-border-color: A5B78A; -fx-border-width: 2; -fx-border-style: solid none none none;" text="Save" textAlignment="CENTER" wrapText="true" />
+                  <Button fx:id="btnRead" layoutY="325.0" mnemonicParsing="false" onAction="#handleBtnLoad" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: ffffff; -fx-border-color: A5B78A; -fx-border-width: 2; -fx-border-style: solid none none none;" text="Load" textAlignment="CENTER" wrapText="true" />
                </children>
                <opaqueInsets>
                   <Insets />

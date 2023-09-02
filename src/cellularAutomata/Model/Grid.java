@@ -28,13 +28,9 @@ public class Grid {
 
     private List<Observer> observersList;
 
-    private AnimationTimer animationTimer;
-    private int iterations;
-
     public double carbon = 0.5;
-    public int parallelDecompositionType = 1; // row, 2 - column, 3-cube
+    public int parallelDecompositionType = 3; // row, 2 - column, 3-cube
 
-//    public ParallelDecomposition parallelDecomposition;
 
     public Grid(int height, int width, int depth, int numberOfGrainsAustenite) {
 
@@ -138,7 +134,6 @@ public class Grid {
 
     public void grainGrowSimulationRun(){
         grainGrowth.grow();
-//        notifyObservers();
     }
 
     public void grainGrowthSimulationRunParallel(int numberOfThreads){
@@ -164,7 +159,6 @@ public class Grid {
 
     public void austeniteFerriteSimulationRun(){
         austeniteFerriteTransformation.grow();
-//        notifyObservers();
     }
 
     public void austeniteFerriteSimulationRunParallel(int numberOfThreads){
@@ -181,7 +175,6 @@ public class Grid {
 
     public void austeniteFerriteSimulationRunFCA(){
         austeniteFerriteTransformation.growFCA();
-//        notifyObservers();
     }
 
     public void austeniteFerriteInit(){
