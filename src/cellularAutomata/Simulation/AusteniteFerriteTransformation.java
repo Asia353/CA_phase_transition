@@ -126,11 +126,13 @@ public class AusteniteFerriteTransformation extends Simulation{
         int threads = numberOfThreads;
         List<Runnable> tasks = new ArrayList<>(threads);
 
-        for (int task = 0; task < threads; task++) {
-            int n = task;
-            tasks.add(() -> {
-                decomposition.decomposeAndExecuteFerrite(n, threads, grid, this);
-            });
+        synchronized (grid.grainsList) {
+            for (int task = 0; task < threads; task++) {
+                int n = task;
+                tasks.add(() -> {
+                    decomposition.decomposeAndExecuteFerrite(n, threads, grid, this);
+                });
+            }
         }
 
         try {
@@ -142,6 +144,9 @@ public class AusteniteFerriteTransformation extends Simulation{
         grid.cellsList = grid.nextCellsList;
 
         grid.iterationSimulation++;
+//        if(run == false) {
+//            System.out.println("iteracja a->f: " + grid.iterationSimulation);
+//        }
 //        System.out.println("iteracja symulacji: " + grid.iterationSimulation);
     }
 

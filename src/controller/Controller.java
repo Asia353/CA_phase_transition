@@ -37,8 +37,11 @@ public class Controller {
     private int numberOfGrains = 100;
     private int visScale = 1;
     private int numberOfThreads = 12;
+
 //    0 - sekwencyjny, 1 - rónoległy, 2 - frontalny
     private int simulationType = 0;
+
+    private String fileName = "Microstructure.txt";
 
     public void setAppController(AppController appController) {
         this.appController = appController;
@@ -168,7 +171,7 @@ public class Controller {
     }
 
     public void handleBtnSave(ActionEvent event) throws IOException {
-        FileWriter write = new FileWriter("initMicrostructure.txt");
+        FileWriter write = new FileWriter(this.fileName);
 
         write.write(String.valueOf(height) + "\n");// + System.lineSeparator());
         write.write(String.valueOf(width) + "\n");// + System.lineSeparator());
@@ -187,14 +190,14 @@ public class Controller {
     }
 
     public void handleBtnLoad(ActionEvent event) throws IOException {
-        Grid loadedGrid = readGrainsFromFile("initMicrostructure.txt");
+        Grid loadedGrid = readGrainsFromFile(this.fileName);
         this.grid = loadedGrid;
         this.visualizer = new Visualizer(this.grid, this.canvas, this.visScale);
         this.visualizer.canvasClear();
         this.grid.addObserver(visualizer);
         this.grid.notifyObservers();
         textFieldC.setText(String.valueOf(grid.carbon));
-        System.out.println("Mikrostruktura zaczytana z pliku \"initMicrostructure.txt\" ");
+        System.out.println("Mikrostruktura zaczytana z pliku: " + this.fileName);
     }
 
     public static Grid readGrainsFromFile(String path) throws IOException {
