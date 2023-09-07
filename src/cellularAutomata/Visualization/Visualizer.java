@@ -208,7 +208,7 @@ public class Visualizer implements Observer {
 
     private Color red(){
 //        return Color.rgb(random.nextInt(100)+155, random.nextInt(50), random.nextInt(50));
-        return Color.rgb(random.nextInt(100)+155, random.nextInt(10), random.nextInt(10));
+        return Color.rgb(random.nextInt(100)+155, random.nextInt(80), random.nextInt(50));
     }
 
 //    3D

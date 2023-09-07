@@ -29,7 +29,7 @@ public class Grid {
     private List<Observer> observersList;
 
     public double carbon = 0.5;
-    public int parallelDecompositionType = 3; // row, 2 - column, 3-cube
+    public int parallelDecompositionType = 1; // row, 2 - column, 3-cube
 
 
     public Grid(int height, int width, int depth, int numberOfGrainsAustenite) {
@@ -180,6 +180,10 @@ public class Grid {
     public void austeniteFerriteInit(){
         austeniteFerriteTransformation.initGrains();
         notifyObservers();
+    }
+
+    public void addCellStateBorder(){
+        grainGrowth.addCellState();
     }
 
     public void correctCarbon(double carbon){

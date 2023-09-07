@@ -34,7 +34,7 @@ public class Controller {
     private int height = 120;
     private int width = 120;
     private int depth = 120;
-    private int numberOfGrains = 100;
+    private int numberOfGrains = 10;
     private int visScale = 1;
     private int numberOfThreads = 12;
 
@@ -106,12 +106,14 @@ public class Controller {
 
         if(this.simulationType == 0) {
             System.out.println("Automat komórkowy sekwencyjny");
+            millisActualTime = System.currentTimeMillis();
             while (grid.grainGrowthRun()) {
                 grid.grainGrowSimulationRun();
             }
         }
         else if(this.simulationType == 1) {
             System.out.println("Automat komórkowy równoległy (wątki: " + this.numberOfThreads + ", dekompozycja: " + grid.parallelDecompositionType +  " (1-row, 2-column, 3-cube))");
+            millisActualTime = System.currentTimeMillis();
             while (grid.grainGrowthRun()) {
                 grid.grainGrowthSimulationRunParallel(this.numberOfThreads);
             }
@@ -119,6 +121,7 @@ public class Controller {
 
         else{
             System.out.println("Frontalny automat komórkowy");
+            millisActualTime = System.currentTimeMillis();
             while (grid.grainGrowthRun()) {
                 grid.grainGrowthSimulationRunFCA();
             }
@@ -126,6 +129,12 @@ public class Controller {
 
         long executionTime = (System.currentTimeMillis() - millisActualTime);
         System.out.println("Czas rozrostu ziaren: " + executionTime * 0.001);
+
+        millisActualTime = System.currentTimeMillis();
+        grid.addCellStateBorder();
+        executionTime = (System.currentTimeMillis() - millisActualTime);
+        System.out.println("Czas utworzenia listy komórek na granicy: " + executionTime * 0.001);
+
         grid.notifyObservers();
 
     }
@@ -141,17 +150,22 @@ public class Controller {
 
     public void handleBtnFerrite(ActionEvent event) {
         grid.iterationSimulation = 0;
-        long millisActualTime = System.currentTimeMillis(); // początkowy czas w milisekundach.
+
+        long millisActualTime = System.currentTimeMillis(); // w milisekundach.
         grid.austeniteFerriteInit();
+        long executionTime = (System.currentTimeMillis() - millisActualTime);
+        System.out.println("Czas inicjalizacji (zarodki) austenit-ferryt: " + executionTime * 0.001);
 
         if(this.simulationType == 0) {
             System.out.println("Automat komórkowy sekwencyjny - austenit-ferryt");
+            millisActualTime = System.currentTimeMillis();
             while(grid.austeniteFerriteRun()){
                 grid.austeniteFerriteSimulationRun();
             }
         }
         else if(this.simulationType == 1) {
             System.out.println("Automat komórkowy równoległy - austenit-ferryt (wątki: " + this.numberOfThreads + ")");
+            millisActualTime = System.currentTimeMillis();
             while (grid.austeniteFerriteRun()) {
                 grid.austeniteFerriteSimulationRunParallel(this.numberOfThreads);
             }
@@ -159,12 +173,13 @@ public class Controller {
 
         else{
             System.out.println("Frontalny automat komórkowy - austenit-ferryt");
+            millisActualTime = System.currentTimeMillis();
             while(grid.austeniteFerriteRun()){
                 grid.austeniteFerriteSimulationRunFCA();
             }
         }
 
-        long executionTime = (System.currentTimeMillis() - millisActualTime);
+        executionTime = (System.currentTimeMillis() - millisActualTime);
         System.out.println("Czas austenit-ferryt: " + executionTime * 0.001);
 
         grid.notifyObservers();

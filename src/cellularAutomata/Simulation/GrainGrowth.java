@@ -18,8 +18,8 @@ public class GrainGrowth extends Simulation{
         this.executorService = Executors.newFixedThreadPool(12);
 
 //        zmiana sposobu sprawdzania sąsiadów
-//        this. neighborhoodSearchPattern = new NeighborFirstGrain(grid, this);
-        this. neighborhoodSearchPattern = new NeighborDominantGrain(grid, this);
+        this. neighborhoodSearchPattern = new NeighborFirstGrain(grid, this);
+//        this. neighborhoodSearchPattern = new NeighborDominantGrain(grid, this);
     }
 
     @Override
@@ -96,7 +96,6 @@ public class GrainGrowth extends Simulation{
         grid.iterationSimulation++;
 
         if(!this.run) {
-            addCellState();
             grid.iterationSimulation = 0;
         }
     }
@@ -129,7 +128,6 @@ public class GrainGrowth extends Simulation{
         grid.iterationSimulation++;
 
         if(!this.run) {
-            addCellState();
             grid.iterationSimulation = 0;
         }
     }
@@ -192,7 +190,6 @@ public class GrainGrowth extends Simulation{
         grid.iterationSimulation++;
 
         if(!this.run) {
-            addCellState();
             grid.iterationSimulation = 0;
         }
     }
@@ -271,31 +268,27 @@ public class GrainGrowth extends Simulation{
             for (int j = 0; j < grid.getWidth(); j++) {
                 for (int k = 0; k < grid.getDepth(); k++) {
 
-                    if (grid.cellsList[i][j][k].getGrainType(grid) == GrainType.austenite) {
-                        Set<Integer> neighbours = new HashSet<>();
+                    Set<Integer> neighbours = new HashSet<>();
 
-                        for (int m = -1; m <= 1; m++) {
-                            for (int n = -1; n <= 1; n++) {
-                                for (int o = -1; o <= 1; o++) {
+                    for (int m = -1; m <= 1; m++) {
+                        for (int n = -1; n <= 1; n++) {
+                            for (int o = -1; o <= 1; o++) {
 
-//                        do periodycznych warunków
-                                    int X = (grid.getHeight() + i + m) % grid.getHeight();
-                                    int Y = (grid.getWidth() + j + n) % grid.getWidth();
-                                    int Z = (grid.getDepth() + k + o) % grid.getDepth();
+                                int X = (grid.getHeight() + i + m) % grid.getHeight();
+                                int Y = (grid.getWidth() + j + n) % grid.getWidth();
+                                int Z = (grid.getDepth() + k + o) % grid.getDepth();
 
-                                    if (grid.cellsList[X][Y][Z].getGrainType(grid) == GrainType.austenite)
-                                        neighbours.add(grid.cellsList[X][Y][Z].idGrain);
-                                }
-                            }
-
-                            if (neighbours.size() > 1) {
-                                grid.cellsListOnTheBorder.add(grid.cellsList[i][j][k]);
+                                neighbours.add(grid.cellsList[X][Y][Z].idGrain);
                             }
                         }
+                    }
+                    if (neighbours.size() > 1) {
+                        grid.cellsListOnTheBorder.add(grid.cellsList[i][j][k]);
                     }
                 }
             }
         }
+        System.out.println("Liczba komórek na granicy: " + grid.cellsListOnTheBorder.size());
     }
 
     public boolean isRun() {
