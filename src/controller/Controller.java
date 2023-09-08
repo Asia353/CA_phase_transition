@@ -31,10 +31,10 @@ public class Controller {
     private Grid grid;
     private Visualizer visualizer;
 
-    private int height = 120;
-    private int width = 120;
-    private int depth = 120;
-    private int numberOfGrains = 10;
+    private int height = 300;
+    private int width = 300;
+    private int depth = 1;
+    private int numberOfGrains = 200;
     private int visScale = 1;
     private int numberOfThreads = 12;
 
@@ -63,7 +63,10 @@ public class Controller {
         grid.grainGrowthSimulationInit();
 
         long executionTime = (System.currentTimeMillis() - millisActualTime);
+        System.out.println("Wymiary siatki: " + grid.getHeight() + "x" + grid.getWidth() + "x" + grid.getDepth() + ", liczba ziaren: " + (grid.grainsList.size()-1));
         System.out.println("Czas inicjalizacji rozrostu: " + executionTime * 0.001);
+
+        System.out.println("-----------------------------------------------------------------------------------");
 
     }
 
@@ -130,10 +133,12 @@ public class Controller {
         long executionTime = (System.currentTimeMillis() - millisActualTime);
         System.out.println("Czas rozrostu ziaren: " + executionTime * 0.001);
 
-        millisActualTime = System.currentTimeMillis();
-        grid.addCellStateBorder();
-        executionTime = (System.currentTimeMillis() - millisActualTime);
-        System.out.println("Czas utworzenia listy komórek na granicy: " + executionTime * 0.001);
+        System.out.println("===================================================================================");
+
+//        millisActualTime = System.currentTimeMillis();
+//        grid.addCellStateBorder();
+//        executionTime = (System.currentTimeMillis() - millisActualTime);
+//        System.out.println("Czas utworzenia listy komórek na granicy: " + executionTime * 0.001);
 
         grid.notifyObservers();
 
@@ -151,10 +156,19 @@ public class Controller {
     public void handleBtnFerrite(ActionEvent event) {
         grid.iterationSimulation = 0;
 
-        long millisActualTime = System.currentTimeMillis(); // w milisekundach.
-        grid.austeniteFerriteInit();
+        long millisActualTime = System.currentTimeMillis();
+        grid.addCellStateBorder();
         long executionTime = (System.currentTimeMillis() - millisActualTime);
+        System.out.println("Czas utworzenia listy komórek na granicy: " + executionTime * 0.001);
+
+        System.out.println("-----------------------------------------------------------------------------------");
+
+        millisActualTime = System.currentTimeMillis(); // w milisekundach.
+        grid.austeniteFerriteInit();
+        executionTime = (System.currentTimeMillis() - millisActualTime);
         System.out.println("Czas inicjalizacji (zarodki) austenit-ferryt: " + executionTime * 0.001);
+
+        System.out.println("-----------------------------------------------------------------------------------");
 
         if(this.simulationType == 0) {
             System.out.println("Automat komórkowy sekwencyjny - austenit-ferryt");
@@ -182,10 +196,14 @@ public class Controller {
         executionTime = (System.currentTimeMillis() - millisActualTime);
         System.out.println("Czas austenit-ferryt: " + executionTime * 0.001);
 
+        System.out.println("===================================================================================");
+
         grid.notifyObservers();
     }
 
     public void handleBtnSave(ActionEvent event) throws IOException {
+        System.out.println("---> zapisano do pliku: " + this.fileName);
+
         FileWriter write = new FileWriter(this.fileName);
 
         write.write(String.valueOf(height) + "\n");// + System.lineSeparator());
@@ -205,6 +223,9 @@ public class Controller {
     }
 
     public void handleBtnLoad(ActionEvent event) throws IOException {
+
+        System.out.println("===================================================================================");
+
         Grid loadedGrid = readGrainsFromFile(this.fileName);
         this.grid = loadedGrid;
         this.visualizer = new Visualizer(this.grid, this.canvas, this.visScale);
@@ -212,7 +233,10 @@ public class Controller {
         this.grid.addObserver(visualizer);
         this.grid.notifyObservers();
         textFieldC.setText(String.valueOf(grid.carbon));
-        System.out.println("Mikrostruktura zaczytana z pliku: " + this.fileName);
+
+        System.out.println("---> Odczyt mikrostruktury z pliku: " + this.fileName);
+        System.out.println("Wymiary siatki: " + grid.getHeight() + "x" + grid.getWidth() + "x" + grid.getDepth() + ", liczba ziaren: " + grid.grainsList.size());
+        System.out.println("-----------------------------------------------------------------------------------");
     }
 
     public static Grid readGrainsFromFile(String path) throws IOException {
