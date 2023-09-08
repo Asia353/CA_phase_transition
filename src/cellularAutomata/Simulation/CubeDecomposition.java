@@ -11,11 +11,37 @@ public class CubeDecomposition implements ParallelDecomposition {
     public void decomposeAndExecute(int task, int totalThreads, Grid grid, GrainGrowth grainGrowth) {
 //        System.out.println("Dekompozycja blokowa rozrost");
         int w, h, d;
-        if (totalThreads == 12) {
+
+        if(totalThreads == 1) {
+            h = 1;
+            w = 1;
+            d = 1;
+        }
+
+        else if(totalThreads == 2) {
+            h = 2;
+            w = 1;
+            d = 1;
+        }
+
+        else if(totalThreads == 4) {
+            h = 2;
+            w = 2;
+            d = 1;
+        }
+
+        else if(totalThreads == 8) {
+            h = 2;
+            w = 2;
+            d = 2;
+        }
+
+        else if (totalThreads == 12) {
             h = 3;
             w = 2;
             d = 2;
-        } else {
+        }
+        else {
             h = grid.getHeight();
             w = grid.getWidth();
             d = grid.getDepth();
@@ -27,11 +53,18 @@ public class CubeDecomposition implements ParallelDecomposition {
         int cubeWidth = grid.getWidth() / w;
         int cubeDepth = grid.getDepth() / d;
 
-        for (int i = (task % 6) / 2 * cubeHeight; i < (((task % 6) / 2) + 1) * cubeHeight; i++) {
-            for (int j = task % 2 * cubeWidth; j < ((task % 2) + 1) * cubeWidth; j++) {
-                for (int k = task / 6 * cubeDepth; k < (task / 6 + 1) * cubeDepth; k++) {
+//        dla 12 wątków
+//        int h_idx = (task % 6) / 2;
+//        int w_idx = task % 2;
+//        int d_idx = task / 6;
 
-//                    for (int k = 0; k < grid.getDepth(); k++) {
+        int h_idx = (task % (totalThreads/d)) / w;
+        int w_idx = task % w;
+        int d_idx = task / (totalThreads/d);
+
+        for (int i = h_idx * cubeHeight; i < (h_idx + 1) * cubeHeight; i++) {
+            for (int j = w_idx * cubeWidth; j < (w_idx + 1) * cubeWidth; j++) {
+                for (int k = d_idx * cubeDepth; k < (d_idx + 1) * cubeDepth; k++) {
 
                     grid.nextCellsList[i][j][k] = new Cell(grid.cellsList[i][j][k]);
 
@@ -63,11 +96,37 @@ public class CubeDecomposition implements ParallelDecomposition {
     public void decomposeAndExecuteFerrite(int task, int totalThreads, Grid grid, AusteniteFerriteTransformation austeniteFerriteTransformation) {
 //        System.out.println("Dekompozycja blokowa fca");
         int w, h, d;
-        if (totalThreads == 12) {
+
+        if(totalThreads == 1) {
+            h = 1;
+            w = 1;
+            d = 1;
+        }
+
+        else if(totalThreads == 2) {
+            h = 2;
+            w = 1;
+            d = 1;
+        }
+
+        else if(totalThreads == 4) {
+            h = 2;
+            w = 2;
+            d = 1;
+        }
+
+        else if(totalThreads == 8) {
+            h = 2;
+            w = 2;
+            d = 2;
+        }
+
+        else if (totalThreads == 12) {
             h = 3;
             w = 2;
             d = 2;
-        } else {
+        }
+        else {
             h = grid.getHeight();
             w = grid.getWidth();
             d = grid.getDepth();
@@ -79,9 +138,13 @@ public class CubeDecomposition implements ParallelDecomposition {
         int cubeWidth = grid.getWidth() / w;
         int cubeDepth = grid.getDepth() / d;
 
-        for (int i = (task % 6) / 2 * cubeHeight; i < (((task % 6) / 2) + 1) * cubeHeight; i++) {
-            for (int j = task % 2 * cubeWidth; j < ((task % 2) + 1) * cubeWidth; j++) {
-                for (int k = task / 6 * cubeDepth; k < (task / 6 + 1) * cubeDepth; k++) {
+        int h_idx = (task % (totalThreads/d)) / w;
+        int w_idx = task % w;
+        int d_idx = task / (totalThreads/d);
+
+        for (int i = h_idx * cubeHeight; i < (h_idx + 1) * cubeHeight; i++) {
+            for (int j = w_idx * cubeWidth; j < (w_idx + 1) * cubeWidth; j++) {
+                for (int k = d_idx * cubeDepth; k < (d_idx + 1) * cubeDepth; k++) {
 
                     grid.nextCellsList[i][j][k] = new Cell(grid.cellsList[i][j][k]);
 

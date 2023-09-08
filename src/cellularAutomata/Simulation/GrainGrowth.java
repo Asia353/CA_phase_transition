@@ -18,8 +18,8 @@ public class GrainGrowth extends Simulation{
         this.executorService = Executors.newFixedThreadPool(12);
 
 //        zmiana sposobu sprawdzania sąsiadów
-        this. neighborhoodSearchPattern = new NeighborFirstGrain(grid, this);
-//        this. neighborhoodSearchPattern = new NeighborDominantGrain(grid, this);
+//        this. neighborhoodSearchPattern = new NeighborFirstGrain(grid, this); // II drugi wariant
+        this. neighborhoodSearchPattern = new NeighborDominantGrain(grid, this); // I wariant
     }
 
     @Override
