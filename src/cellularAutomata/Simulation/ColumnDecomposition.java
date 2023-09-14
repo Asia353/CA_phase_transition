@@ -5,9 +5,6 @@ import cellularAutomata.Model.CellState;
 import cellularAutomata.Model.GrainType;
 import cellularAutomata.Model.Grid;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class ColumnDecomposition implements ParallelDecomposition {
     @Override
     public void decomposeAndExecute(int task, int totalThreads, Grid grid, GrainGrowth grainGrowth) {
@@ -18,7 +15,7 @@ public class ColumnDecomposition implements ParallelDecomposition {
 
                     grid.nextCellsList[i][j][k] = new Cell(grid.cellsList[i][j][k]);
 
-                    if (grid.cellsList[i][j][k].cellState != CellState.active) {
+                    if (grid.cellsList[i][j][k].cellState != CellState.alive) {
                         grainGrowth.run = true;
 
                         int newId = grainGrowth.findNewId(i, j, k);
@@ -32,7 +29,7 @@ public class ColumnDecomposition implements ParallelDecomposition {
                         if (grid.nextCellsList[i][j][k].cellState == CellState.pending) {
 
                             if (((int) Math.ceil(grid.nextCellsList[i][j][k].time)) <= grid.iterationSimulation) {
-                                grid.nextCellsList[i][j][k].cellState = CellState.active;
+                                grid.nextCellsList[i][j][k].cellState = CellState.alive;
                                 grid.grainsList.get(grid.nextCellsList[i][j][k].idGrain).addCell(grid.carbon); //zliczanie komórek w ziarnie
                             }
                         }
@@ -62,7 +59,6 @@ public class ColumnDecomposition implements ParallelDecomposition {
 
                             austeniteFerriteTransformation.run = true;
 
-//                            currentCell?
                             grid.grainsList.get(grid.cellsList[i][j][k].idGrain).deleteCell(austeniteFerriteTransformation.ferrytCarbon);
                             grid.grainsList.get(newId).addCell(austeniteFerriteTransformation.ferrytCarbon);
 
@@ -78,7 +74,7 @@ public class ColumnDecomposition implements ParallelDecomposition {
                         austeniteFerriteTransformation.run = true;
 
                         if (((int) Math.ceil(grid.nextCellsList[i][j][k].time)) <= grid.grainsList.get(grid.nextCellsList[i][j][k].idGrain).iteration) {
-                            grid.nextCellsList[i][j][k].cellState = CellState.active;
+                            grid.nextCellsList[i][j][k].cellState = CellState.alive;
                         }
                     }
                 }

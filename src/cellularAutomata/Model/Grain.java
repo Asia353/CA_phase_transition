@@ -25,23 +25,18 @@ public class Grain {
         this.parentGrain = 0;
     }
 
-    public void changeInitAustenitCarbon(double carbon){
+    public void changeCarbonConcentration(double carbon){
         this.carbonConcentration = carbon;
-        this.countCarbonAll();
+        this.countCarbonForAll();
     }
 
-    public void countCarbonAll(){
+    public void countCarbonForAll(){
         this.carbonAll = this.numberOfCells * this.carbonConcentration;
     }
 
     public void correctCarbon(double carbon) {
         this.carbonAll = this.carbonAll - carbon;
         this.carbonConcentration = this.carbonAll / this.numberOfCells;
-    }
-
-
-    public GrainType getGrainType() {
-        return grainType;
     }
 
     public void addCell(double carbon){
@@ -58,8 +53,8 @@ public class Grain {
         return this.carbonConcentration;
     }
 
-    public double getCarbonAll() {
-        return carbonAll;
+    public GrainType getGrainType() {
+        return grainType;
     }
 
     public int getParentGrain() {

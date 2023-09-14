@@ -23,14 +23,17 @@ public class AusteniteFerriteTransformation extends Simulation{
     public void initGrains() {
         grid.cellsListFCA = new ArrayList<>();
 
-        System.out.println("Sprawdzenie czy na pewno lista z zianrami pending jest pusta: " + grid.cellsListFCA.size());
-        grid.countBorderStateAustenit();
+//        System.out.println("Sprawdzenie czy na pewno lista z zianrami pending jest pusta: " + grid.cellsListFCA.size());
+
+        long millisActualTime = System.currentTimeMillis();
         Collections.shuffle(grid.cellsListOnTheBorder);
+        long executionTime = (System.currentTimeMillis() - millisActualTime);
+        System.out.println("Czas wykonania funkcji shuffle " + executionTime * 0.001);
 
 //        numberOfFerriteGrains = grid.cellsListOnTheBorder.size() * 0.1; //domyślnie do 2D
         numberOfFerriteGrains = grid.cellsListOnTheBorder.size() * 0.01; //3D
 
-//        System.out.println("number of ferrite: " + numberOfFerriteGrains );
+        System.out.println("number of ferrite: " + numberOfFerriteGrains );
 
         for (int i = 0; i < numberOfFerriteGrains; ) {
 
@@ -62,7 +65,6 @@ public class AusteniteFerriteTransformation extends Simulation{
     @Override
     public void grow(){
 
-//        po co każde ziarno ma swoją iterację?
         for(int i = 0; i < grid.grainsList.size(); i++) {
             grid.grainsList.get(i).iteration++;
         }
@@ -86,7 +88,6 @@ public class AusteniteFerriteTransformation extends Simulation{
 
                             this.run = true;
 
-//                            currentCell?
                             grid.grainsList.get(grid.cellsList[i][j][k].idGrain).deleteCell(this.ferrytCarbon);
                             grid.grainsList.get(newId).addCell(this.ferrytCarbon);
 
@@ -102,7 +103,7 @@ public class AusteniteFerriteTransformation extends Simulation{
                         this.run = true;
 
                         if (((int) Math.ceil(grid.nextCellsList[i][j][k].time)) <= grid.grainsList.get(grid.nextCellsList[i][j][k].idGrain).iteration) {
-                            grid.nextCellsList[i][j][k].cellState = CellState.active;
+                            grid.nextCellsList[i][j][k].cellState = CellState.alive;
                         }
                     }
                 }
@@ -144,19 +145,13 @@ public class AusteniteFerriteTransformation extends Simulation{
         grid.cellsList = grid.nextCellsList;
 
         grid.iterationSimulation++;
-//        if(run == false) {
-//            System.out.println("iteracja a->f: " + grid.iterationSimulation);
-//        }
-//        System.out.println("iteracja symulacji: " + grid.iterationSimulation);
     }
 
     public void addNeighborsToTheFrontList(Cell cell){
-        //        sąsiedztwo moore'a
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 for (int k = -1; k <= 1; k++) {
 
-//                warunki brzegowe periodyczne
                     int X = (grid.getHeight() + cell.getX() + i) % grid.getHeight();
                     int Y = (grid.getWidth() + cell.getY() + j) % grid.getWidth();
                     int Z = (grid.getDepth() + cell.getZ() + k) % grid.getDepth();
@@ -180,7 +175,6 @@ public class AusteniteFerriteTransformation extends Simulation{
 
     public void growFCA(){
 
-//        po co każde ziarno ma swoją iterację?
         for(int i = 0; i < grid.grainsList.size(); i++) {
             grid.grainsList.get(i).iteration++;
         }
@@ -202,7 +196,7 @@ public class AusteniteFerriteTransformation extends Simulation{
 
             else if (cell.cellState == CellState.pending) {
                 if (((int) Math.ceil(cell.time)) <= grid.iterationSimulation) {
-                    grid.nextCellsList[cell.getX()][cell.getY()][cell.getZ()].cellState = CellState.active;
+                    grid.nextCellsList[cell.getX()][cell.getY()][cell.getZ()].cellState = CellState.alive;
                     addNeighborsToTheFrontList(cell);
                 }
                 else {
@@ -219,17 +213,15 @@ public class AusteniteFerriteTransformation extends Simulation{
 
     @Override
     public int findNewId(int x, int y, int z) {
-//        sąsiedztwo moore'a
 
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 for (int k = -1; k <= 1; k++) {
-//                warunki brzegowe periodyczne
                     int X = (grid.getHeight() + x + i) % grid.getHeight();
                     int Y = (grid.getWidth() + y + j) % grid.getWidth();
                     int Z = (grid.getDepth() + z + k) % grid.getDepth();
 
-                    if ((grid.cellsList[x][y][z].idGrain == grid.grainsList.get(grid.cellsList[X][Y][Z].idGrain).getParentGrain()) && (grid.cellsList[X][Y][Z].cellState == CellState.active)) {
+                    if ((grid.cellsList[x][y][z].idGrain == grid.grainsList.get(grid.cellsList[X][Y][Z].idGrain).getParentGrain()) && (grid.cellsList[X][Y][Z].cellState == CellState.alive)) {
                         return grid.cellsList[X][Y][Z].idGrain;
                     }
                 }

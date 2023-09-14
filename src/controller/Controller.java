@@ -2,39 +2,38 @@ package controller;
 
 import cellularAutomata.Model.Grid;
 import cellularAutomata.Visualization.Visualizer;
-import javafx.animation.AnimationTimer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Pane;
 
 import java.io.*;
-import java.util.*;
 
 public class Controller {
 
     private AppController appController;
 
     @FXML
-    private Pane paneVisualize;
-    @FXML
     private Canvas canvas;
     @FXML
     private TextField textFieldC;
     @FXML
-    private ComboBox<String> comboBoxOptions;
+    private TextField textFieldHeight;
     @FXML
-    private ComboBox<String> comboBoxParallel;
+    private TextField textFieldWidth;
+    @FXML
+    private TextField textFieldDepth;
+    @FXML
+    private ComboBox<String> comboBoxOptions;
 
     private Grid grid;
     private Visualizer visualizer;
 
-    private int height = 300;
-    private int width = 300;
-    private int depth = 1;
-    private int numberOfGrains = 200;
+    private int height = 240;
+    private int width = 240;
+    private int depth = 240;
+    private int numberOfGrains = 100;
     private int visScale = 1;
     private int numberOfThreads = 12;
 
@@ -45,8 +44,6 @@ public class Controller {
 
     public void setAppController(AppController appController) {
         this.appController = appController;
-//        this.canvas.setHeight((height+depth+depth+2) * visScale);
-//        this.canvas.setWidth((width+width+depth+depth+3) * visScale);
         this.canvas.setHeight(850);
         this.canvas.setWidth(850);
     }
@@ -57,7 +54,9 @@ public class Controller {
         this.visualizer.canvasClear();
         this.grid.addObserver(visualizer);
         textFieldC.setText(String.valueOf(grid.carbon));
-
+        textFieldHeight.setText(String.valueOf(grid.getHeight()));
+        textFieldWidth.setText(String.valueOf(grid.getWidth()));
+        textFieldDepth.setText(String.valueOf(grid.getDepth()));
         long millisActualTime = System.currentTimeMillis(); // początkowy czas w milisekundach.
 
         grid.grainGrowthSimulationInit();
@@ -67,7 +66,6 @@ public class Controller {
         System.out.println("Czas inicjalizacji rozrostu: " + executionTime * 0.001);
 
         System.out.println("-----------------------------------------------------------------------------------");
-
     }
 
     public void initialize() {
@@ -84,24 +82,6 @@ public class Controller {
                 this.simulationType = 2;
             }
         });
-    }
-
-//    public void parallelDecomposition() {
-//        comboBoxParallel.setOnAction(event -> {
-//            String selectedOption = comboBoxParallel.getValue();
-//            if (selectedOption.equals("row")) {
-//                grid.parallelDecompositionType = 1;
-//            } else if (selectedOption.equals("column")) {
-//                grid.parallelDecompositionType = 2;
-//            }
-////            else if (selectedOption.equals("frontal cellular automata")) {
-////                this.simulationType = 3;
-////            }
-//        });
-//    }
-
-    public void handleBtnOneStep(ActionEvent event) {
-        grid.grainGrowthOneStep();
     }
 
     public void handleBtnRun(ActionEvent event) {
@@ -153,8 +133,26 @@ public class Controller {
         textFieldC.setText(String.valueOf(grid.carbon));
     }
 
+    public void TextFieldHeightHandle(ActionEvent event) {
+        this.height = Integer.parseInt(this.textFieldHeight.getText());
+        textFieldHeight.setText(String.valueOf(this.height));
+    }
+
+    public void TextFieldWidthHandle(ActionEvent event) {
+        this.width = Integer.parseInt(this.textFieldWidth.getText());
+        textFieldWidth.setText(String.valueOf(this.width));
+    }
+
+    public void TextFieldDepthHandle(ActionEvent event) {
+        this.depth = Integer.parseInt(this.textFieldDepth.getText());
+        textFieldDepth.setText(String.valueOf(this.depth));
+    }
+
     public void handleBtnFerrite(ActionEvent event) {
         grid.iterationSimulation = 0;
+
+        System.out.println("Przemiana austenit-ferryt");
+        System.out.println("Wymiary siatki: " + grid.getHeight() + "x" + grid.getWidth() + "x" + grid.getDepth() + ", liczba ziaren: " + (grid.grainsList.size() - 1) + ", węgiel: " + grid.carbon);
 
         long millisActualTime = System.currentTimeMillis();
         grid.addCellStateBorder();
@@ -233,9 +231,13 @@ public class Controller {
         this.grid.addObserver(visualizer);
         this.grid.notifyObservers();
         textFieldC.setText(String.valueOf(grid.carbon));
+        textFieldHeight.setText(String.valueOf(grid.getHeight()));
+        textFieldWidth.setText(String.valueOf(grid.getWidth()));
+        textFieldDepth.setText(String.valueOf(grid.getDepth()));
+
 
         System.out.println("---> Odczyt mikrostruktury z pliku: " + this.fileName);
-        System.out.println("Wymiary siatki: " + grid.getHeight() + "x" + grid.getWidth() + "x" + grid.getDepth() + ", liczba ziaren: " + grid.grainsList.size());
+        System.out.println("Wymiary siatki: " + grid.getHeight() + "x" + grid.getWidth() + "x" + grid.getDepth() + ", liczba ziaren: " + (grid.grainsList.size()-1));
         System.out.println("-----------------------------------------------------------------------------------");
     }
 

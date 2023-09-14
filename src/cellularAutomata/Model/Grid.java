@@ -2,7 +2,6 @@ package cellularAutomata.Model;
 
 import Utils.Observer;
 import cellularAutomata.Simulation.*;
-import javafx.animation.AnimationTimer;
 
 import java.util.*;
 
@@ -21,7 +20,6 @@ public class Grid {
     public List<Cell> nextCellsListFCA;
 
     public Map<Integer, Grain> grainsList;
-    private Random random = new Random();
 
     private GrainGrowth grainGrowth;
     private AusteniteFerriteTransformation austeniteFerriteTransformation;
@@ -29,8 +27,7 @@ public class Grid {
     private List<Observer> observersList;
 
     public double carbon = 0.5;
-    public int parallelDecompositionType = 1; // row, 2 - column, 3-cube
-
+    public int parallelDecompositionType = 3; // row, 2 - column, 3-cube
 
     public Grid(int height, int width, int depth, int numberOfGrainsAustenite) {
 
@@ -68,7 +65,6 @@ public class Grid {
 
         this.nextCellsList = new Cell[this.height][this.width][this.depth];
 
-        // Tutaj zmodyfikuj dla 3 wymiarów
         for (int k = 0; k < this.depth; k++) {
             for (int i = 0; i < this.height; i++) {
                 for (int j = 0; j < this.width; j++) {
@@ -76,7 +72,6 @@ public class Grid {
                     grainsList.putIfAbsent(cellID, new Grain(cellID, GrainType.austenite, i, j, k, this.carbon));
                     if (cellID == 0) {
                         this.cellsList[i][j][k] = new Cell(i,j,k);
-//                        grainsList.get(cellID).addCell(this.carbon);
                     }
                     else {
                         grainsList.get(cellID).addCell(this.carbon);
@@ -115,8 +110,8 @@ public class Grid {
         }
     }
 
-    public void countBorderStateAustenit(){
-        grainGrowth.addCellState();
+    public void setThreadsNumber(int n){
+        this.grainGrowth.setThreadsNumber(n);
     }
 
     public boolean grainGrowthRun(){
@@ -189,7 +184,7 @@ public class Grid {
     public void correctCarbon(double carbon){
         this.carbon = carbon;
         for (int i = 1; i < this.grainsList.size(); i++) {
-            this.grainsList.get(i).changeInitAustenitCarbon(carbon);
+            this.grainsList.get(i).changeCarbonConcentration(carbon);
         }
     }
 
@@ -204,11 +199,9 @@ public class Grid {
                     toAdd = false;
                     int currentGrainId = this.cellsList[i][j][k].idGrain;
 
-//                    sąsiedztwo moorea z zasięgiem 1
                     for (int m = -1; m <= 1; m++) {
                         for (int n = -1; n <= 1; n++) {
                             for (int o = -1; o <= 1; o++) {
-//                        do periodycznych warunków
                                 int X = (this.getHeight() + i + m) % this.getHeight();
                                 int Y = (this.getWidth() + j + n) % this.getWidth();
                                 int Z = (this.getDepth() + k + o) % this.getDepth();

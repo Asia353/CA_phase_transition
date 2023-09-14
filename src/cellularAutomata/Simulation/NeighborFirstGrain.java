@@ -19,22 +19,16 @@ public class NeighborFirstGrain implements NeighborhoodSearchPattern {
             for (int j = -1; j <= 1; j++) {
                 for (int k = -1; k <= 1; k++) {
 
-//                warunki brzegowe periodyczne
                     int X = (grid.getHeight() + x + i) % grid.getHeight();
                     int Y = (grid.getWidth() + y + j) % grid.getWidth();
                     int Z = (grid.getDepth() + z + k) % grid.getDepth();
 
-                    if (grid.cellsList[X][Y][Z].cellState == CellState.active) {
+                    if (grid.cellsList[X][Y][Z].cellState == CellState.alive) {
                         return grid.cellsList[X][Y][Z].idGrain;
                     }
                 }
             }
         }
-        return 0;
-    }
-
-    @Override
-    public int findNewIdFCA(int x, int y, int z) {
         return 0;
     }
 }

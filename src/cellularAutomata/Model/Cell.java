@@ -33,7 +33,7 @@ public class Cell {
 
     public Cell(int x, int y, int z, int idGrain){
         this.idGrain = idGrain;
-        this.cellState = CellState.active;
+        this.cellState = CellState.alive;
         this.x = x;
         this.y = y;
         this.z = z;
@@ -50,10 +50,6 @@ public class Cell {
 
     public GrainType getGrainType(Grid grid) {
         return grid.grainsList.get(this.idGrain).getGrainType();
-    }
-
-    public int getId() {
-        return idGrain;
     }
 
     public int getX() {

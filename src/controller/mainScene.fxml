@@ -42,31 +42,17 @@
                         <String fx:value="-fx-alignment: CENTER_LEFT;" />
                      </style>
                   </ComboBox>
-<!--                  <ComboBox fx:id="comboBoxParallel" layoutY="425.0" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: ffffff; -fx-border-color: AFC37D; -fx-border-style: solid none solid none; -fx-border-width: 2">-->
-<!--                     <items>-->
-<!--                        <FXCollections fx:factory="observableArrayList">-->
-<!--                           <String fx:value="row" />-->
-<!--                           <String fx:value="column" />-->
-<!--&lt;!&ndash;                           <String fx:value="frontal cellular automata" />&ndash;&gt;-->
-<!--                        </FXCollections>-->
-<!--                     </items>-->
-<!--                     <value>-->
-<!--                        <String fx:value="row" />-->
-<!--                     </value>-->
-<!--                     <padding>-->
-<!--                        <Insets left="10.0" />-->
-<!--                     </padding>-->
-<!--                     <style>-->
-<!--                        <String fx:value="-fx-alignment: CENTER_LEFT;" />-->
-<!--                     </style>-->
-<!--                  </ComboBox>-->
-                  <Button fx:id="btnInit" layoutY="75.0" mnemonicParsing="false" onAction="#handleBtnInit" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: ffffff; -fx-background-color: ffffff; -fx-border-color: ffffff; -fx-border-width: 2; -fx-border-style: solid none solid none;" text="Initialize microstructure" textAlignment="CENTER" wrapText="true" />
-                  <TextField fx:id="textFieldC" layoutY="475.0" onAction="#TextFieldCHandle" prefHeight="50.0" prefWidth="200.0" promptText="C [%]" style="-fx-background-color: ffffff; -fx-border-color: ffffff; -fx-border-width: 2; -fx-border-style: solid none none none;" />
-                  <Button fx:id="btnRun" layoutY="125.0" mnemonicParsing="false" onAction="#handleBtnRun" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: ffffff; -fx-border-color: A5B78A; -fx-border-width: 2; -fx-border-style: solid none none none;" text="Run" textAlignment="CENTER" wrapText="true" />
-                  <Button fx:id="btnBorder" layoutY="175.0" mnemonicParsing="false" onAction="#handleBtnBorder" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: ffffff; -fx-border-color: A5B78A; -fx-border-width: 2; -fx-border-style: solid none none none;" text="Border" textAlignment="CENTER" wrapText="true" />
-                  <Button fx:id="btnFerrite" layoutY="225.0" mnemonicParsing="false" onAction="#handleBtnFerrite" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: ffffff; -fx-border-color: A5B78A; -fx-border-width: 2; -fx-border-style: solid none none none;" text="Ferrite" textAlignment="CENTER" wrapText="true" />
-                  <Button fx:id="btnPearlite" layoutY="275.0" mnemonicParsing="false" onAction="#handleBtnSave" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: ffffff; -fx-border-color: A5B78A; -fx-border-width: 2; -fx-border-style: solid none none none;" text="Save" textAlignment="CENTER" wrapText="true" />
-                  <Button fx:id="btnRead" layoutY="325.0" mnemonicParsing="false" onAction="#handleBtnLoad" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: ffffff; -fx-border-color: A5B78A; -fx-border-width: 2; -fx-border-style: solid none none none;" text="Load" textAlignment="CENTER" wrapText="true" />
+                  <TextField fx:id="textFieldHeight" layoutY="75.0" onAction="#TextFieldHeightHandle" prefHeight="50.0" prefWidth="200.0" promptText="Height" style="-fx-background-color: ffffff; -fx-border-color: ffffff; -fx-border-width: 2; -fx-border-style: solid none none none;" />
+                  <TextField fx:id="textFieldWidth" layoutY="125.0" onAction="#TextFieldWidthHandle" prefHeight="50.0" prefWidth="200.0" promptText="Width" style="-fx-background-color: ffffff; -fx-border-color: A5B78A; -fx-border-width: 2; -fx-border-style: solid none none none;" />
+                  <TextField fx:id="textFieldDepth" layoutY="175.0" onAction="#TextFieldDepthHandle" prefHeight="50.0" prefWidth="200.0" promptText="Depth" style="-fx-background-color: ffffff; -fx-border-color: A5B78A; -fx-border-width: 2; -fx-border-style: solid none none none;" />
+
+                  <Button fx:id="btnInit" layoutY="225.0" mnemonicParsing="false" onAction="#handleBtnInit" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: ffffff; -fx-background-color: ffffff; -fx-border-color: A5B78A; -fx-border-width: 2; -fx-border-style: solid none none none;" text="Initialize microstructure" textAlignment="CENTER" wrapText="true" />
+                  <Button fx:id="btnRun" layoutY="275.0" mnemonicParsing="false" onAction="#handleBtnRun" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: ffffff; -fx-border-color: A5B78A; -fx-border-width: 2; -fx-border-style: solid none none none;" text="Run" textAlignment="CENTER" wrapText="true" />
+<!--                  <Button fx:id="btnBorder" layoutY="175.0" mnemonicParsing="false" onAction="#handleBtnBorder" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: ffffff; -fx-border-color: A5B78A; -fx-border-width: 2; -fx-border-style: solid none none none;" text="Border" textAlignment="CENTER" wrapText="true" />-->
+                  <Button fx:id="btnFerrite" layoutY="325.0" mnemonicParsing="false" onAction="#handleBtnFerrite" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: ffffff; -fx-border-color: A5B78A; -fx-border-width: 2; -fx-border-style: solid none none none;" text="Ferrite" textAlignment="CENTER" wrapText="true" />
+                  <Button fx:id="btnPearlite" layoutY="375.0" mnemonicParsing="false" onAction="#handleBtnSave" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: ffffff; -fx-border-color: A5B78A; -fx-border-width: 2; -fx-border-style: solid none none none;" text="Save" textAlignment="CENTER" wrapText="true" />
+                  <Button fx:id="btnRead" layoutY="425.0" mnemonicParsing="false" onAction="#handleBtnLoad" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: ffffff; -fx-border-color: A5B78A; -fx-border-width: 2; -fx-border-style: solid none none none;" text="Load" textAlignment="CENTER" wrapText="true" />
+                  <TextField fx:id="textFieldC" layoutY="475.0" onAction="#TextFieldCHandle" prefHeight="50.0" prefWidth="200.0" promptText="C [%]" style="-fx-background-color: ffffff; -fx-border-color: A5B78A; -fx-border-width: 2; -fx-border-style: solid none none none;" />
                </children>
                <opaqueInsets>
                   <Insets />

@@ -87,14 +87,11 @@ public class Visualizer implements Observer {
                         if (grid.getGrainType(grid.cellsList[i][grid.getWidth() - j - 1][k].idGrain) == GrainType.austenite) {
                             austenitColor.putIfAbsent(grid.cellsList[i][grid.getWidth() - j - 1][k].idGrain, this.red());
                             graphics.setFill(austenitColor.get(grid.cellsList[i][grid.getWidth() - j - 1][k].idGrain));
-//                            graphics.fillRect(((grid.getWidth() - j - 1) + 2 * grid.getDepth() + grid.getWidth() + 3) * visScale, (i + grid.getDepth() + 1) * visScale, visScale, visScale);
                             graphics.fillRect(((j) + 2 * grid.getDepth() + grid.getWidth() + 3) * visScale, (i + grid.getDepth() + 1) * visScale, visScale, visScale);
                         }
                         else if (grid.getGrainType(grid.cellsList[i][grid.getWidth() - j - 1][k].idGrain) == GrainType.ferrite) {
-//                            System.out.println("ferrite");
                             ferrytColor.putIfAbsent(grid.cellsList[i][grid.getWidth() - j - 1][k].idGrain, this.yellow());
                             graphics.setFill(ferrytColor.get(grid.cellsList[i][grid.getWidth() - j - 1][k].idGrain));
-//                            graphics.fillRect(((grid.getWidth() - j - 1) + 2 * grid.getDepth() + grid.getWidth() + 3) * visScale, (i + grid.getDepth() + 1) * visScale, visScale, visScale);
                             graphics.fillRect(((j) + 2 * grid.getDepth() + grid.getWidth() + 3) * visScale, (i + grid.getDepth() + 1) * visScale, visScale, visScale);
                         }
                     }
@@ -109,13 +106,11 @@ public class Visualizer implements Observer {
                         if (grid.getGrainType(grid.cellsList[i][j][grid.getDepth() - k - 1].idGrain) == GrainType.austenite) {
                             austenitColor.putIfAbsent(grid.cellsList[i][j][grid.getDepth() - k - 1].idGrain, this.red());
                             graphics.setFill(austenitColor.get(grid.cellsList[i][j][grid.getDepth() - k - 1].idGrain));
-//                            graphics.fillRect((grid.getDepth() - k - 1) * visScale, (i + grid.getDepth() + 1) * visScale, visScale, visScale);
                             graphics.fillRect((k) * visScale, (i + grid.getDepth() + 1) * visScale, visScale, visScale);
                         }
                         else if (grid.getGrainType(grid.cellsList[i][j][grid.getDepth() - k - 1].idGrain) == GrainType.ferrite) {
                             ferrytColor.putIfAbsent(grid.cellsList[i][j][grid.getDepth() - k - 1].idGrain, this.yellow());
                             graphics.setFill(ferrytColor.get(grid.cellsList[i][j][grid.getDepth() - k - 1].idGrain));
-//                            graphics.fillRect((grid.getDepth() - k - 1) * visScale, (i + grid.getDepth() + 1) * visScale, visScale, visScale);
                             graphics.fillRect((k) * visScale, (i + grid.getDepth() + 1) * visScale, visScale, visScale);
                         }
                     }
@@ -136,7 +131,6 @@ public class Visualizer implements Observer {
                     }
                 }
             }
-// pętle były odwrotnie. Teraz chyba jest okej
             for (k = 0; k < grid.getDepth(); k++) {
                 for (j = 0; j < grid.getWidth(); j++) {
                     i = 0;
@@ -145,13 +139,11 @@ public class Visualizer implements Observer {
                         if (grid.getGrainType(grid.cellsList[i][j][grid.getDepth() - k - 1].idGrain) == GrainType.austenite) {
                             austenitColor.putIfAbsent(grid.cellsList[i][j][grid.getDepth() - k - 1].idGrain, this.red());
                             graphics.setFill(austenitColor.get(grid.cellsList[i][j][grid.getDepth() - k - 1].idGrain));
-//                            graphics.fillRect((j + grid.getDepth() + 1) * visScale, (grid.getDepth() - k - 1) * visScale, visScale, visScale);
                             graphics.fillRect((j + grid.getDepth() + 1) * visScale, (k) * visScale, visScale, visScale);
                         }
                         else if (grid.getGrainType(grid.cellsList[i][j][grid.getDepth() - k - 1].idGrain) == GrainType.ferrite) {
                             ferrytColor.putIfAbsent(grid.cellsList[i][j][grid.getDepth() - k - 1].idGrain, this.yellow());
                             graphics.setFill(ferrytColor.get(grid.cellsList[i][j][grid.getDepth() - k - 1].idGrain));
-//                            graphics.fillRect((j + grid.getDepth() + 1) * visScale, (grid.getDepth() - k - 1) * visScale, visScale, visScale);
                             graphics.fillRect((j + grid.getDepth() + 1) * visScale, (k) * visScale, visScale, visScale);
                         }
                     }
@@ -207,7 +199,6 @@ public class Visualizer implements Observer {
     }
 
     private Color red(){
-//        return Color.rgb(random.nextInt(100)+155, random.nextInt(50), random.nextInt(50));
         return Color.rgb(random.nextInt(100)+155, random.nextInt(80), random.nextInt(50));
     }
 

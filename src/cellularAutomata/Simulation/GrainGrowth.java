@@ -18,8 +18,12 @@ public class GrainGrowth extends Simulation{
         this.executorService = Executors.newFixedThreadPool(12);
 
 //        zmiana sposobu sprawdzania sąsiadów
-//        this. neighborhoodSearchPattern = new NeighborFirstGrain(grid, this); // II drugi wariant
-        this. neighborhoodSearchPattern = new NeighborDominantGrain(grid, this); // I wariant
+        this. neighborhoodSearchPattern = new NeighborFirstGrain(grid, this); // II drugi wariant
+//        this. neighborhoodSearchPattern = new NeighborDominantGrain(grid, this); // I wariant
+    }
+
+    public void setThreadsNumber(int n){
+        this.executorService =  Executors.newFixedThreadPool(n);
     }
 
     @Override
@@ -36,8 +40,6 @@ public class GrainGrowth extends Simulation{
 
     private boolean addRandomNewGrain(){
         Random random = new Random();
-//        int x = random.nextInt(grid.getWidth());
-//        int y = random.nextInt(grid.getHeight());
         int x = random.nextInt(grid.getHeight());
         int y = random.nextInt(grid.getWidth());
         int z = random.nextInt(grid.getDepth());
@@ -45,11 +47,10 @@ public class GrainGrowth extends Simulation{
         if (grid.cellsList[x][y][z].idGrain == 0) {
             int id = grid.grainsList.size();
             grid.cellsList[x][y][z].idGrain = id;
-            grid.cellsList[x][y][z].cellState = CellState.active;
+            grid.cellsList[x][y][z].cellState = CellState.alive;
             grid.grainsList.put(id, new Grain(id, GrainType.austenite, x, y, z, grid.carbon));
 //            do fca
             grid.cellsListFCA.add(grid.cellsList[x][y][z]);
-//            System.out.println("ziarno: " +  id + ", x,y,z: " +x+ "," + y+ ","+z);
             return true;
         }
         return false;
@@ -67,7 +68,7 @@ public class GrainGrowth extends Simulation{
 
                     grid.nextCellsList[i][j][k] = new Cell(grid.cellsList[i][j][k]);
 
-                    if (grid.cellsList[i][j][k].cellState != CellState.active) {
+                    if (grid.cellsList[i][j][k].cellState != CellState.alive) {
                         this.run = true;
 
                         int newId = this.findNewId(i, j, k);
@@ -81,8 +82,8 @@ public class GrainGrowth extends Simulation{
                         if (grid.nextCellsList[i][j][k].cellState == CellState.pending) {
 
                             if (((int) Math.ceil(grid.nextCellsList[i][j][k].time)) <= grid.iterationSimulation) {
-                                grid.nextCellsList[i][j][k].cellState = CellState.active;
-                                grid.grainsList.get(grid.nextCellsList[i][j][k].idGrain).addCell(grid.carbon); //zliczanie komórek w ziarnie
+                                grid.nextCellsList[i][j][k].cellState = CellState.alive;
+                                grid.grainsList.get(grid.nextCellsList[i][j][k].idGrain).addCell(grid.carbon);
                             }
                         }
                     }
@@ -132,15 +133,11 @@ public class GrainGrowth extends Simulation{
         }
     }
 
-//    operacje tylko na tablicy cellList bez robienia nextCellList - chyba ok
     public void addNeighborsToTheFrontalList(Cell cell){
-        //        sąsiedztwo moore'a
-        Map<Integer, Double> neighbours = new HashMap<>();
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 for (int k = -1; k <= 1; k++) {
 
-//                warunki brzegowe periodyczne
                     int X = (grid.getHeight() + cell.getX() + i) % grid.getHeight();
                     int Y = (grid.getWidth() + cell.getY() + j) % grid.getWidth();
                     int Z = (grid.getDepth() + cell.getZ() + k) % grid.getDepth();
@@ -174,7 +171,7 @@ public class GrainGrowth extends Simulation{
 
             else if (cell.cellState == CellState.pending) {
                 if (((int) Math.ceil(cell.time)) <= grid.iterationSimulation) {
-                    grid.cellsList[cell.getX()][cell.getY()][cell.getZ()].cellState = CellState.active;
+                    grid.cellsList[cell.getX()][cell.getY()][cell.getZ()].cellState = CellState.alive;
                     grid.grainsList.get(cell.idGrain).addCell(grid.carbon); //zliczanie komórek w ziarnie
                     addNeighborsToTheFrontalList(cell);
                 }
@@ -193,68 +190,6 @@ public class GrainGrowth extends Simulation{
             grid.iterationSimulation = 0;
         }
     }
-
-//    public void addNeighborsToTheFrontalList(Cell cell){
-//        //        sąsiedztwo moore'a
-//        Map<Integer, Double> neighbours = new HashMap<>();
-//        for (int i = -1; i <= 1; i++) {
-//            for (int j = -1; j <= 1; j++) {
-//                for (int k = -1; k <= 1; k++) {
-//
-////                warunki brzegowe periodyczne
-//                    int X = (grid.getHeight() + cell.getX() + i) % grid.getHeight();
-//                    int Y = (grid.getWidth() + cell.getY() + j) % grid.getWidth();
-//                    int Z = (grid.getDepth() + cell.getZ() + k) % grid.getDepth();
-//
-////                    komórka zmienia stan na pending, dostaje id ziarna analizowanego i dodana jest do listy następnego kroku
-//                    if (grid.cellsList[X][Y][Z].cellState == CellState.notAlive) {
-//                        grid.nextCellsList[X][Y][Z].cellState = CellState.pending;
-//                        grid.nextCellsList[X][Y][Z].idGrain = cell.idGrain;
-//                        grid.nextCellsList[X][Y][Z].time = countDistance(grid.nextCellsList[X][Y][Z], X, Y, Z); //czy to ok?
-//                        grid.nextCellsListFCA.add(grid.cellsList[X][Y][Z]);
-//                    }
-//                }
-//            }
-//        }
-//    }
-//
-//    public void growFCA(){
-////        System.out.println("Numer iteracji w grain growFCA: " + grid.iterationSimulation);
-////        grid.nextCellsList = new Cell[grid.getHeight()][grid.getWidth()][grid.getDepth()];
-//        grid.nextCellsList = grid.cellsList;
-//
-//        grid.nextCellsListFCA = new LinkedList<>();
-//        this.run = false;
-//
-//        for(Cell cell : grid.cellsListFCA) {
-//            this.run = true;
-//
-//            if(grid.iterationSimulation == 0) {
-//                addNeighborsToTheFrontalList(cell);
-//            }
-//
-//            else if (cell.cellState == CellState.pending) {
-//                if (((int) Math.ceil(cell.time)) <= grid.iterationSimulation) {
-//                    grid.nextCellsList[cell.getX()][cell.getY()][cell.getZ()].cellState = CellState.active;
-//                    grid.grainsList.get(cell.idGrain).addCell(grid.carbon); //zliczanie komórek w ziarnie
-//                    addNeighborsToTheFrontalList(cell);
-//                }
-//                else {
-//                    grid.nextCellsListFCA.add(cell);
-//                }
-//            }
-//        }
-//
-//        grid.cellsList = grid.nextCellsList;
-//        grid.cellsListFCA = grid.nextCellsListFCA;
-//
-//        grid.iterationSimulation++;
-//
-//        if(!this.run) {
-//            addCellState();
-//            grid.iterationSimulation = 0;
-//        }
-//    }
 
     @Override
     public int findNewId(int x, int y, int z) {
